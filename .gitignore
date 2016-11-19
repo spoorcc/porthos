@@ -31,6 +31,6 @@ tst/output
 tst/sim
 
 # Doxygen documentation
-doc/html
+#doc/html
 doc/latex
 doc/gh-pages
