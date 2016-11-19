@@ -1,7 +1,7 @@
 #! /usr/bin/bash
 
 gh_pages_branch_dir="../doc/html"
-pdf_file_name="RemediOSM_Manual.pdf"
+pdf_file_name="Porthos.pdf"
 
 current_dir=${PWD##*/}
 
@@ -38,7 +38,7 @@ if [ "${current_dir}" == "doc" ]; then
     current_dir=${PWD##*/}
 fi
 
-if [ "${current_dir}" == "remedi" ]; then
+if [ "${current_dir}" == "porthos" ]; then
 
     build_project
     copy_pdf_to_doc_root
