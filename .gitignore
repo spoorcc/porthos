@@ -1,0 +1,36 @@
+$ cat .gitignore
+
+#-----------------------------------------------
+# Filetypes to ignore
+#-----------------------------------------------
+
+#--------------
+# Generic
+
+# Tempory files
+*~
+*.csv
+*.swp
+
+*.wlf
+*.vstf
+
+*.cf
+
+#-----------------------------------------------
+# Directories to ignore
+#-----------------------------------------------
+
+# Tempory folder
+tmp
+# Generated targets
+bld
+
+# Test outputs
+tst/output
+tst/sim
+
+# Doxygen documentation
+doc/html
+doc/latex
+doc/gh-pages
