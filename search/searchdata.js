@@ -1,24 +1,36 @@
 var indexSectionsWithContent =
 {
-  0: "lmprstw",
-  1: "lmrstw",
-  2: "mt",
-  3: "lpstw"
+  0: "lmprstwxy",
+  1: "p",
+  2: "lmrstw",
+  3: "mt",
+  4: "xy",
+  5: "m",
+  6: "m",
+  7: "lpstw"
 };
 
 var indexSectionNames =
 {
   0: "all",
-  1: "files",
-  2: "functions",
-  3: "pages"
+  1: "classes",
+  2: "files",
+  3: "functions",
+  4: "variables",
+  5: "enums",
+  6: "enumvalues",
+  7: "pages"
 };
 
 var indexSectionLabels =
 {
   0: "All",
-  1: "Files",
-  2: "Functions",
-  3: "Pages"
+  1: "Classes",
+  2: "Files",
+  3: "Functions",
+  4: "Variables",
+  5: "Enumerations",
+  6: "Enumerator",
+  7: "Pages"
 };
 
