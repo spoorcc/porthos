@@ -1,8 +1,9 @@
 #include <stdio.h>
 
 /*! error code for library */
-typedef enum {MOTION_OK = 0,\
-              MOTION_PARAMETER_ERROR} MotionError;
+typedef enum {MOTION_OK = 0,         /*!< Everything went OK */ \
+              MOTION_PARAMETER_ERROR /*!< Wrong parameter was provided */
+             } MotionError;
 
 /*! Simple position struct */
 typedef struct {
