@@ -1,0 +1,2 @@
+add_executable(test_libmotion test_libmotion.c)
+target_link_libraries(test_libmotion motion)
