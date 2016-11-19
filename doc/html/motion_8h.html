@@ -65,6 +65,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">motion.h File Reference</div>  </div>
@@ -74,13 +76,70 @@ $(function() {
 </div>
 <p><a href="motion_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structposition__t.html">position_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a44231efd390638578e516e39ff6bcdb6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8h.html#a44231efd390638578e516e39ff6bcdb6">MotionError</a> { <a class="el" href="motion_8h.html#a44231efd390638578e516e39ff6bcdb6a4fe80e9b55c522b7f8b7f418c693c707">MOTION_OK</a> = 0, 
+<a class="el" href="motion_8h.html#a44231efd390638578e516e39ff6bcdb6a75e4689cfc8d9b339ad260eeb41420bc">MOTION_PARAMETER_ERROR</a>
+ }</td></tr>
+<tr class="separator:a44231efd390638578e516e39ff6bcdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a477ce3e61dc6b1fc0e225192732fd014"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8h.html#a477ce3e61dc6b1fc0e225192732fd014">motion_init</a> ()</td></tr>
 <tr class="memdesc:a477ce3e61dc6b1fc0e225192732fd014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the motion library.  <a href="#a477ce3e61dc6b1fc0e225192732fd014">More...</a><br /></td></tr>
 <tr class="separator:a477ce3e61dc6b1fc0e225192732fd014"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9b1e488007077111c8007125625f7e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8h.html#a0c9b1e488007077111c8007125625f7e">motion_get_current_position</a> (<a class="el" href="structposition__t.html">position_t</a> *position)</td></tr>
+<tr class="memdesc:a0c9b1e488007077111c8007125625f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current position.  <a href="#a0c9b1e488007077111c8007125625f7e">More...</a><br /></td></tr>
+<tr class="separator:a0c9b1e488007077111c8007125625f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a44231efd390638578e516e39ff6bcdb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44231efd390638578e516e39ff6bcdb6">&sect;&nbsp;</a></span>MotionError</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="motion_8h.html#a44231efd390638578e516e39ff6bcdb6">MotionError</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>error code for library </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a44231efd390638578e516e39ff6bcdb6a4fe80e9b55c522b7f8b7f418c693c707"></a>MOTION_OK&#160;</td><td class="fielddoc"><p>Everything went OK </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a44231efd390638578e516e39ff6bcdb6a75e4689cfc8d9b339ad260eeb41420bc"></a>MOTION_PARAMETER_ERROR&#160;</td><td class="fielddoc"><p>Wrong parameter was provided </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a0c9b1e488007077111c8007125625f7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c9b1e488007077111c8007125625f7e">&sect;&nbsp;</a></span>motion_get_current_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_get_current_position </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structposition__t.html">position_t</a> *&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns current position. </p>
+
+</div>
+</div>
 <a id="a477ce3e61dc6b1fc0e225192732fd014"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a477ce3e61dc6b1fc0e225192732fd014">&sect;&nbsp;</a></span>motion_init()</h2>
 
@@ -104,7 +163,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 19 2016 22:36:17 for Porthos by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Nov 20 2016 00:21:03 for Porthos by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>
