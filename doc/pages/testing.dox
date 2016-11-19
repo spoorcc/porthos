@@ -1,0 +1,20 @@
+/*! \page testing Testing
+  \brief This page describes the testing procedures for the Porthos project.
+
+  \tableofcontents
+
+  \section testing_unittests Unittests
+  This project uses check for testing the C-code
+  In order to run the tests do the following
+
+      cd bld
+      cmake ..
+      make
+      make test
+
+  To have more output for analyzing failing tests use follwoing command instead
+  of make test:
+
+      ctest --verbose
+
+*/
