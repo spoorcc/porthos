@@ -8,6 +8,7 @@ Some requirements have been created, but these are still very much open to
  discussion.
 
 The compiled documentation can be read at http://spoorcc.github.io/porthos/
+And the PDF at http://spoorcc.github.io/porthos/Porthos.pdf
 
 Compiling
 ---------
