@@ -1,13 +1,14 @@
 var indexSectionsWithContent =
 {
-  0: "lmprstwxy",
+  0: "lmnprstwxy",
   1: "p",
   2: "lmrstw",
   3: "mt",
   4: "xy",
   5: "m",
   6: "m",
-  7: "lpstw"
+  7: "n",
+  8: "lpstw"
 };
 
 var indexSectionNames =
@@ -19,7 +20,8 @@ var indexSectionNames =
   4: "variables",
   5: "enums",
   6: "enumvalues",
-  7: "pages"
+  7: "defines",
+  8: "pages"
 };
 
 var indexSectionLabels =
@@ -31,6 +33,7 @@ var indexSectionLabels =
   4: "Variables",
   5: "Enumerations",
   6: "Enumerator",
-  7: "Pages"
+  7: "Macros",
+  8: "Pages"
 };
 

@@ -71,6 +71,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="motion_8h_source.html">motion.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -78,13 +79,26 @@ Functions</h2></td></tr>
 <tr class="memitem:a477ce3e61dc6b1fc0e225192732fd014"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a477ce3e61dc6b1fc0e225192732fd014">motion_init</a> ()</td></tr>
 <tr class="memdesc:a477ce3e61dc6b1fc0e225192732fd014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the motion library.  <a href="#a477ce3e61dc6b1fc0e225192732fd014">More...</a><br /></td></tr>
 <tr class="separator:a477ce3e61dc6b1fc0e225192732fd014"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c9b1e488007077111c8007125625f7e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a0c9b1e488007077111c8007125625f7e">motion_get_current_position</a> (<a class="el" href="structposition__t.html">position_t</a> *position)</td></tr>
-<tr class="memdesc:a0c9b1e488007077111c8007125625f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current position.  <a href="#a0c9b1e488007077111c8007125625f7e">More...</a><br /></td></tr>
-<tr class="separator:a0c9b1e488007077111c8007125625f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6358ed81fbc15a8592849de574523edb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a6358ed81fbc15a8592849de574523edb">motion_get_distance</a> (float *const distance)</td></tr>
+<tr class="separator:a6358ed81fbc15a8592849de574523edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a228ed0e1defabae99d736d5b0bfaeaf1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a228ed0e1defabae99d736d5b0bfaeaf1">motion_get_direction</a> (float *const direction)</td></tr>
+<tr class="separator:a228ed0e1defabae99d736d5b0bfaeaf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd45c7b6dee4e4a9daac359976e2b5ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#abd45c7b6dee4e4a9daac359976e2b5ca">motion_get_goal_direction</a> (float *const direction)</td></tr>
+<tr class="separator:abd45c7b6dee4e4a9daac359976e2b5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4054eff36f78f43f75585547eda916e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#ab4054eff36f78f43f75585547eda916e">motion_get_current_position</a> (<a class="el" href="structposition__t.html">position_t</a> *const position)</td></tr>
+<tr class="memdesc:ab4054eff36f78f43f75585547eda916e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current position.  <a href="#ab4054eff36f78f43f75585547eda916e">More...</a><br /></td></tr>
+<tr class="separator:ab4054eff36f78f43f75585547eda916e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54477a8dc8baed60d89371c5f642bfe5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a54477a8dc8baed60d89371c5f642bfe5">motion_move_to</a> (<a class="el" href="structposition__t.html">position_t</a> const *const position)</td></tr>
+<tr class="memdesc:a54477a8dc8baed60d89371c5f642bfe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets goal position.  <a href="#a54477a8dc8baed60d89371c5f642bfe5">More...</a><br /></td></tr>
+<tr class="separator:a54477a8dc8baed60d89371c5f642bfe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6431667b2a9fad2164941cffaf10143"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#af6431667b2a9fad2164941cffaf10143">motion_update</a> (void)</td></tr>
+<tr class="separator:af6431667b2a9fad2164941cffaf10143"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae90a411d37753ed889c4e96767da85"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motion_8c.html#a3ae90a411d37753ed889c4e96767da85">motion_update_direction</a> (void)</td></tr>
+<tr class="separator:a3ae90a411d37753ed889c4e96767da85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0c9b1e488007077111c8007125625f7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c9b1e488007077111c8007125625f7e">&sect;&nbsp;</a></span>motion_get_current_position()</h2>
+<a id="ab4054eff36f78f43f75585547eda916e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4054eff36f78f43f75585547eda916e">&sect;&nbsp;</a></span>motion_get_current_position()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -92,7 +106,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int motion_get_current_position </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structposition__t.html">position_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structposition__t.html">position_t</a> *const&#160;</td>
           <td class="paramname"><em>position</em></td><td>)</td>
           <td></td>
         </tr>
@@ -100,6 +114,60 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns current position. </p>
+
+</div>
+</div>
+<a id="a228ed0e1defabae99d736d5b0bfaeaf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a228ed0e1defabae99d736d5b0bfaeaf1">&sect;&nbsp;</a></span>motion_get_direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_get_direction </td>
+          <td>(</td>
+          <td class="paramtype">float *const&#160;</td>
+          <td class="paramname"><em>direction</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6358ed81fbc15a8592849de574523edb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6358ed81fbc15a8592849de574523edb">&sect;&nbsp;</a></span>motion_get_distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_get_distance </td>
+          <td>(</td>
+          <td class="paramtype">float *const&#160;</td>
+          <td class="paramname"><em>distance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd45c7b6dee4e4a9daac359976e2b5ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd45c7b6dee4e4a9daac359976e2b5ca">&sect;&nbsp;</a></span>motion_get_goal_direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_get_goal_direction </td>
+          <td>(</td>
+          <td class="paramtype">float *const&#160;</td>
+          <td class="paramname"><em>direction</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -123,10 +191,66 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a54477a8dc8baed60d89371c5f642bfe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54477a8dc8baed60d89371c5f642bfe5">&sect;&nbsp;</a></span>motion_move_to()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_move_to </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structposition__t.html">position_t</a> const *const&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets goal position. </p>
+
+</div>
+</div>
+<a id="af6431667b2a9fad2164941cffaf10143"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6431667b2a9fad2164941cffaf10143">&sect;&nbsp;</a></span>motion_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_update </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ae90a411d37753ed889c4e96767da85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ae90a411d37753ed889c4e96767da85">&sect;&nbsp;</a></span>motion_update_direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int motion_update_direction </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Nov 20 2016 00:21:03 for Porthos by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Nov 20 2016 15:06:01 for Porthos by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>
