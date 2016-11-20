@@ -1,7 +1,11 @@
 #include <check.h>
+#include <math.h>
 #include <stdio.h>
 
 #include "motion.h"
+
+#define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
+#define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-9), msg);
 
 /*! \brief Test initialization
 
@@ -18,20 +22,17 @@ END_TEST
 */
 START_TEST (test_get_current_position_GW001)
 {
-    int result = MOTION_OK;
     position_t position = {0};
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL( motion_init());
 
     /* Execute */
-    result = motion_get_current_position(&position);
+    CALL(motion_get_current_position(&position));
 
     /* Verify */
-    fail_if(result != 0, "Should succeed");
-    fail_if(position.x != 0.0, "Expected x-position 0.0");
-    fail_if(position.y != 0.0, "Expected y-position 0.0");
+    ck_assert_dbl_eq_msg(position.x, 0.0, "X-position is wrong");
+    ck_assert_dbl_eq_msg(position.y, 0.0, "Y-position is wrong");
 
     /* Teardown */
 }
@@ -45,8 +46,7 @@ START_TEST (test_get_current_position_BW001)
     int result = MOTION_OK;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
     result = motion_get_current_position(NULL);
@@ -63,18 +63,15 @@ END_TEST
 */
 START_TEST (test_move_to_GW001)
 {
-    int result = MOTION_OK;
     position_t position = {.x=42.0, .y=53.0};
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
-    result = motion_move_to(&position);
+    CALL(motion_move_to(&position));
 
     /* Verify */
-    fail_if(result != 0, "Should succeed");
 
     /* Teardown */
 }
@@ -88,8 +85,7 @@ START_TEST (test_move_to_BW001)
     int result = MOTION_OK;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
     result = motion_move_to(NULL);
@@ -105,23 +101,18 @@ END_TEST
 */
 START_TEST (test_get_distance_GW001)
 {
-    int result = MOTION_OK;
     position_t position = {.x=3.0, .y=4.0};
     float distance = 0.0;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
-
-    result = motion_move_to(&position);
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
+    CALL(motion_move_to(&position));
 
     /* Execute */
-    result = motion_get_distance(&distance);
+    CALL(motion_get_distance(&distance));
 
     /* Verify */
-    fail_if(result != 0, "Should succeed");
-    fail_if(distance != 5.0, "Should be 3.0, 4.0, 5.0 triangle");
+    ck_assert_dbl_eq_msg(distance, 5.0, "Should be 3.0, 4.0, 5.0 triangle");
 
     /* Teardown */
 }
@@ -134,8 +125,7 @@ START_TEST (test_get_distance_BW001)
     int result = MOTION_OK;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
     result = motion_get_distance(NULL);
@@ -152,20 +142,17 @@ END_TEST
 */
 START_TEST (test_get_direction_GW001)
 {
-    int result = MOTION_OK;
     position_t position = {.x=3.0, .y=4.0};
     float direction = 0.0;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
-    result = motion_get_direction(&direction);
+    CALL(motion_get_direction(&direction));
 
     /* Verify */
-    fail_if(result != 0, "Should succeed");
-    fail_if(direction != 0.0, "Should be 0.0");
+    ck_assert_dbl_eq_msg(direction, 0.0, "Should be 0.0");
 
     /* Teardown */
 }
@@ -178,8 +165,7 @@ START_TEST (test_get_direction_BW001)
     int result = MOTION_OK;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
     result = motion_get_direction(NULL);
@@ -209,19 +195,16 @@ START_TEST (test_get_goal_direction_GW001)
     float degrees = 0.0;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
-
-    result = motion_move_to(&get_goal_direction_GW_positions[_i]);
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
+    CALL(motion_move_to(&get_goal_direction_GW_positions[_i]));
 
     /* Execute */
-    result = motion_get_goal_direction(&degrees);
+    CALL(motion_get_goal_direction(&degrees));
 
     /* Verify */
-    fail_if(result != 0, "Should succeed");
-
-    fail_if(degrees != get_goal_direction_GW_degrees[_i], "Should be 135 degrees");
+    ck_assert_dbl_eq_msg(degrees,
+                         get_goal_direction_GW_degrees[_i],
+                         "Should be 135 degrees");
 
     /* Teardown */
 }
@@ -234,8 +217,7 @@ START_TEST (test_get_goal_direction_BW001)
     int result = MOTION_OK;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
 
     /* Execute */
     result = motion_get_goal_direction(NULL);
@@ -252,30 +234,22 @@ END_TEST
 */
 START_TEST (test_update_direction_GW001)
 {
-    int result = MOTION_OK;
     position_t position = {.x=-2.0, .y=-2.0};
     float current_direction = 0.0;
     float goal_direction = 0.0;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
-
-    result = motion_move_to(&position);
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
+    CALL(motion_move_to(&position));
 
     /* Execute */
-    result = motion_update_direction();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_update_direction());
 
     /* Verify */
-    result = motion_get_direction(&current_direction);
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_get_direction(&current_direction));
+    CALL(motion_get_goal_direction(&goal_direction));
 
-    result = motion_get_goal_direction(&goal_direction);
-    fprintf(stderr, "\nDirection: Current=%f, Goal=%f\n", current_direction, goal_direction);
-
-    fail_if(current_direction != -45.0, "Should be reduced to -45");
+    ck_assert_dbl_eq_msg(current_direction, -45.0, "Should be reduced to -45");
 
     /* Teardown */
 }
@@ -286,25 +260,19 @@ END_TEST
 */
 START_TEST (test_update_direction_GW002)
 {
-    int result = MOTION_OK;
-    position_t position = {.x=0.5, .y=1.0};
+    position_t position = {.x=sqrt(3), .y=1.0};
     float current_direction = 0.0;
 
     /* Setup */
-    result = motion_init();
-    fail_if(result != 0, "Should succeed");
-
-    result = motion_move_to(&position);
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_init());
+    CALL(motion_move_to(&position));
 
     /* Execute */
-    result = motion_update_direction();
-    fail_if(result != 0, "Should succeed");
+    CALL(motion_update_direction());
 
     /* Verify */
-    result = motion_get_direction(&current_direction);
-    fail_if(result != 0, "Should succeed");
-    fail_if((current_direction - 26.565) > 0.001, "Should be reduced to -90");
+    CALL(motion_get_direction(&current_direction));
+    ck_assert_dbl_eq_msg(current_direction, 45.0, "Should be reduced to -90");
 
     /* Teardown */
 }
