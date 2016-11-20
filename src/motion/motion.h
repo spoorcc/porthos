@@ -13,6 +13,12 @@ typedef struct {
 
 extern int motion_init();
 
-extern int motion_get_current_position(position_t *position);
+extern int motion_get_current_position(position_t * const position);
+extern int motion_get_distance(float * const distance);
+extern int motion_get_direction(float * const degrees);
+extern int motion_get_goal_direction(float * const degrees);
 
 extern int motion_move_to(position_t const * const position);
+
+extern int motion_update(void);
+extern int motion_update_direction(void);

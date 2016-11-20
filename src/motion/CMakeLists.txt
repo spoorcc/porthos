@@ -1,2 +1,2 @@
-add_library(motion motion.c motion.h)
+add_library(motion SHARED motion.c motion.h)
 
