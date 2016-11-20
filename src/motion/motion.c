@@ -118,13 +118,33 @@ int motion_move_to(position_t const * const position)
     return (int) result;
 }
 
-int motion_update(void)
+int motion_update_movement(void)
 {
    MotionError result = MOTION_OK;
 
    float distance = 0.0;
+   float goal_direction = 0.0;
 
-   result = motion_get_distance(&distance);
+   result = motion_get_goal_direction(&goal_direction);
+
+   if(result == MOTION_OK)
+   {
+       if(gl_direction != goal_direction)
+       {
+          result = MOTION_NOT_ALIGNED_ERROR;
+       }
+       else
+       {
+          result = motion_get_distance(&distance);
+          if(result == MOTION_OK)
+          {
+              gl_position.x += gl_speed * sin(gl_direction);
+              gl_position.y += gl_speed * cos(gl_direction);
+          }
+       }
+    }
+
+    return (int) result;
 }
 
 int motion_update_direction(void)

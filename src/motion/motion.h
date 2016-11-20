@@ -1,8 +1,9 @@
 #include <stdio.h>
 
 /*! error code for library */
-typedef enum {MOTION_OK = 0,         /*!< Everything went OK */ \
-              MOTION_PARAMETER_ERROR /*!< Wrong parameter was provided */
+typedef enum {MOTION_OK = 0,          /*!< Everything went OK */ \
+              MOTION_PARAMETER_ERROR, /*!< Wrong parameter was provided */
+              MOTION_NOT_ALIGNED_ERROR /*!< Direction not in goal direction */
              } MotionError;
 
 /*! Simple position struct */
@@ -20,5 +21,5 @@ extern int motion_get_goal_direction(float * const degrees);
 
 extern int motion_move_to(position_t const * const position);
 
-extern int motion_update(void);
+extern int motion_update_movement(void);
 extern int motion_update_direction(void);

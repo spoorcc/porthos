@@ -5,7 +5,7 @@
 #include "motion.h"
 
 #define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
-#define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-9), msg);
+#define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-6), msg);
 
 /*! \brief Test initialization
 
@@ -278,6 +278,50 @@ START_TEST (test_update_direction_GW002)
 }
 END_TEST
 
+/* \brief Test updating movement
+*/
+START_TEST (test_update_movement_GW001)
+{
+    position_t position = {.x=0.0, .y=10.0};
+    position_t current_position = {0};
+
+    /* Setup */
+    CALL(motion_init());
+    CALL(motion_move_to(&position));
+
+    /* Execute */
+    CALL(motion_update_movement());
+
+    /* Verify */
+    CALL(motion_get_current_position(&current_position));
+    ck_assert_dbl_eq_msg(current_position.x, 0.0, "Should moved along Y-axis");
+    ck_assert_dbl_eq_msg(current_position.y, 1.2, "Should moved along Y-axis");
+
+    /* Teardown */
+}
+END_TEST
+
+
+/* \brief Test updating movement
+*/
+START_TEST (test_update_movement_BW001)
+{
+    int result = (int) MOTION_OK;
+    position_t position = {.x=10.0, .y=10.0};
+
+    /* Setup */
+    CALL(motion_init());
+    CALL(motion_move_to(&position));
+
+    /* Execute */
+    result = motion_update_movement();
+
+    /* Verify */
+    ck_assert_msg(result == (int) MOTION_NOT_ALIGNED_ERROR, "Should not move before turning");
+
+    /* Teardown */
+}
+END_TEST
 
 Suite* motion (void) {
         Suite *suite = suite_create("motion");
@@ -302,6 +346,9 @@ Suite* motion (void) {
 
         tcase_add_test(tcase, test_update_direction_GW001);
         tcase_add_test(tcase, test_update_direction_GW002);
+
+        tcase_add_test(tcase, test_update_movement_GW001);
+        tcase_add_test(tcase, test_update_movement_BW001);
 
         suite_add_tcase(suite, tcase);
         return suite;
