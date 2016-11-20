@@ -15,8 +15,6 @@ END_TEST
 
 
 /*! \brief Test getting position
-
-Test initialization of Motion library
 */
 START_TEST (test_get_current_position_GW001)
 {
@@ -40,9 +38,7 @@ START_TEST (test_get_current_position_GW001)
 END_TEST
 
 
-/*! \brief Test getting position
-
-Test initialization of Motion library
+/*! \brief Test getting position - NULL parameter
 */
 START_TEST (test_get_current_position_BW001)
 {
@@ -62,6 +58,49 @@ START_TEST (test_get_current_position_BW001)
 }
 END_TEST
 
+
+/*! \brief Test setting position
+*/
+START_TEST (test_move_to_GW001)
+{
+    int result = MOTION_OK;
+    position_t position = {.x=42.0, .y=53.0};
+
+    /* Setup */
+    result = motion_init();
+    fail_if(result != 0, "Should succeed");
+
+    /* Execute */
+    result = motion_move_to(&position);
+
+    /* Verify */
+    fail_if(result != 0, "Should succeed");
+
+    /* Teardown */
+}
+END_TEST
+
+
+/*! \brief Test setting position - NUL parameter
+*/
+START_TEST (test_move_to_BW001)
+{
+    int result = MOTION_OK;
+
+    /* Setup */
+    result = motion_init();
+    fail_if(result != 0, "Should succeed");
+
+    /* Execute */
+    result = motion_move_to(NULL);
+
+    /* Verify */
+    fail_if(result != (int) MOTION_PARAMETER_ERROR, "Should fail");
+
+    /* Teardown */
+}
+END_TEST
+
 Suite* motion (void) {
         Suite *suite = suite_create("motion");
         TCase *tcase = tcase_create("GW");
@@ -70,6 +109,9 @@ Suite* motion (void) {
 
         tcase_add_test(tcase, test_get_current_position_GW001);
         tcase_add_test(tcase, test_get_current_position_BW001);
+
+        tcase_add_test(tcase, test_move_to_GW001);
+        tcase_add_test(tcase, test_move_to_BW001);
 
         suite_add_tcase(suite, tcase);
         return suite;

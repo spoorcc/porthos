@@ -14,3 +14,5 @@ typedef struct {
 extern int motion_init();
 
 extern int motion_get_current_position(position_t *position);
+
+extern int motion_move_to(position_t const * const position);

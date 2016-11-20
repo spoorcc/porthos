@@ -3,6 +3,7 @@
 
 /* Position tracked through motions in meters */
 static position_t gl_position = {0};
+static position_t gl_goal_position = {0};
 
 /*! \brief Initializes the motion library
 
@@ -29,6 +30,24 @@ int motion_get_current_position(position_t *position)
     else
     {
         *position = gl_position;
+    }
+
+    return (int) result;
+}
+
+/*! \brief Sets goal position
+*/
+int motion_move_to(position_t const * const position)
+{
+    MotionError result = MOTION_OK;
+
+    if( position == NULL)
+    {
+        result = MOTION_PARAMETER_ERROR;
+    }
+    else
+    {
+       gl_goal_position = *position;
     }
 
     return (int) result;
