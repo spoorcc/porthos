@@ -1,0 +1,18 @@
+language: cpp
+sudo: false
+addons:
+  apt:
+    packages:
+      - cmake
+      - doxygen
+      - check
+compiler: 
+  - gcc
+  - clang
+  
+script:
+  - mkdir bld
+  - cd bld
+  - cmake ..
+  - make
+  - make test
