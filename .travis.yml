@@ -1,15 +1,33 @@
 language: cpp
 sudo: false
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "Dfs2p2PxktDX9/fGnsWs7e07dPLJtB0VFUHjuJaPkrsFZIvsKi7x81MtHVYiutZzfQu9nKT3QUrDAZzHPBjrzt6kLWmx5LuVvgeUC64MXkJ/I0wF06KZsmoyDgpYCDbPApWhEO6FiqeFa7TI0AnFK75CbGUrKz/ZVUoTZBIhoSwflxf4BJVmoFVPGGdo0aXwOMAR8V9TgWdJNhwfoLA4Uz/PD6zsob+diERFLZz1Xtx13uGXXX6AQlGMaue9DOAVjAOaepU6MUb1++61annz5oqKIT1mlYFiolaI00RW9Crvx7nnU6saBxhSpWxeQ+pai50wD4HrVqzU3HoffxtxuCQTz3qXCnebFI7hrYMQSj3zmZ00wagracid3STxXvIyiqBr72rzC4++RRjAlWvbaxkT7QfIIjAcTBlIhFZjZyg1SaelfxzJubxnE9n0zKx24a+1mPuStOH3EcZi3zQGKmfMqxrwMzHnU4P//yRoEMdAJ4dGvN944Zh0b8vseNgZHfZD53jpxwDXDIEVnHwBNes6DWwY5z5Zi5qKJ10WAN0On+2sbrgu8mHDitQPjINgpxXHFtDFHY9ZxV/f2Cjk6a0aZkDdzgp1w7P2pxbDeXIJ7KpW2ENTkZJyMQ7bQ4k+faXEFd73+dncUHMRNapehSOBpnpReY6pzyCqv2E/8gM="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
 addons:
   apt:
     packages:
       - cmake
       - doxygen
       - check
+coverity_scan:
+    project:
+      name: "spoorcc/porthos"
+      description: "Build submitted via Travis CI"
+    build_command_prepend: "mkdir bld && cd bld && cmake .."
+    build_command:   "make"
+    branch_pattern: coverity_scan
+    
 compiler: 
   - gcc
   - clang
-  
+ 
 script:
   - mkdir bld
   - cd bld
