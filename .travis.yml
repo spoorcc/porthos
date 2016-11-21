@@ -20,6 +20,7 @@ addons:
     project:
       name: "spoorcc/porthos"
       description: "Build submitted via Travis CI"
+    notification_email: ben.spoor@gmail.com
     build_command_prepend: "mkdir bld && cd bld && cmake .."
     build_command:   "make"
     branch_pattern: master
