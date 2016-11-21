@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/spoorcc/porthos.svg?branch=master)](https://travis-ci.org/spoorcc/porthos)
+[![Coverity Scan](https://img.shields.io/coverity/scan/3997.svg)](https://scan.coverity.com/projects/spoorcc-porthos)
 
 Porthos
 -----------------
