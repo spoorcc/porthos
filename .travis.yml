@@ -5,7 +5,7 @@ addons:
     packages:
       - cmake
       - doxygen
-      - check-devel
+      - check
 compiler: 
   - gcc
   - clang
