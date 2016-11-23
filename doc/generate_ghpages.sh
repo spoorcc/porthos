@@ -25,7 +25,7 @@ commit_gh_pages() {
 
 push_remote() {
     cd ${project_root}
-    git subtree push --prefix $gh_pages_branch_dir origin gh-pages
+    git push origin `git subtree split --prefix $gh_pages_branch_dir master`:gh-pages --force
 }
 
 copy_pdf_to_doc_root() {
