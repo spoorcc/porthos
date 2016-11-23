@@ -13,7 +13,21 @@ Test initialization of Mapper library
 */
 START_TEST (test_init)
 {
-    CALL(mapper_init());
+    CALL(mapper_init(1.0, 1.0, 3));
+}
+END_TEST
+
+
+/*! \brief Test adding single point
+*/
+START_TEST (test_add_point)
+{
+    CALL(mapper_init(1.0, 1.0, 2));
+
+    CALL(mapper_add_point(.75, .25, MAPPER_BLOCKED));
+
+    CALL(mapper_print_map());
+
 }
 END_TEST
 
@@ -22,6 +36,7 @@ Suite* mapper (void) {
         TCase *tcase = tcase_create("GW");
 
         tcase_add_test(tcase, test_init);
+        tcase_add_test(tcase, test_add_point);
 
         suite_add_tcase(suite, tcase);
         return suite;
