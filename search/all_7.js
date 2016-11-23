@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['workflow',['Workflow',['../workflow.html',1,'']]],
-  ['workflow_2edox',['workflow.dox',['../workflow_8dox.html',1,'']]]
+  ['system_20description',['System Description',['../system_description.html',1,'']]],
+  ['system_5fdescription_2edox',['system_description.dox',['../system__description_8dox.html',1,'']]]
 ];

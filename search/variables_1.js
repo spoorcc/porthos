@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y',['y',['../structposition__t.html#af5fb9bd02cb51336477d5290fe32cec6',1,'position_t']]]
+  ['range_5fscan_5fresult',['range_scan_result',['../range_8h.html#a7db7efff5df041bf22c3e98928fa56fd',1,'range.h']]]
 ];
