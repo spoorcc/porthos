@@ -15,7 +15,7 @@ typedef struct Node {
 static Node gl_map = {0};
 
 static float gl_size[2] = {1.0, 1.0};
-static float gl_max_level = 1;
+static int gl_max_level = 1;
 
 
 extern int _mapper_add_children(Node * node);
@@ -41,35 +41,21 @@ int mapper_clear_map()
 int mapper_add_point(float x, float y, const MaptileValue value)
 {
     int result = (int) MAPPER_OK;
-    char current_depth = 0;
-    char index = 0;
-    float half_x, half_y;
+    int current_depth = 0;
+    int index = 0;
+
+    int max_depth = pow(2, gl_max_level);
 
     Node *current_node = &gl_map;
 
-    while( (current_depth < gl_max_level) && (result == MAPPER_OK))
+    int ax = x * max_depth / gl_size[0];
+    int ay = y * max_depth / gl_size[1];
+
+    for(current_depth=0; (current_depth < gl_max_level) && (result == MAPPER_OK); ++current_depth)
     {
-        ++current_depth;
-        half_x = gl_size[0] / powf(2, current_depth);
-        half_y = gl_size[1] / powf(2, current_depth);
-
-        /* West if x < 0.0 */
-        if(x < half_x)
-        {
-            index = 0;
-        }
-        else
-        {
-            index = 1;
-            x -= half_x;
-        }
-
-        /* South if y in bottom */
-        if(y >= half_y)
-        {
-            index += 2;
-            y -= half_y;
-        }
+        /* \todo Cleanup */
+        index =  (ax & (1<<(gl_max_level - current_depth)))?1:0;
+        index += (ay & (1<<(gl_max_level - current_depth)))?2:0;
 
         /* Create children if needed */
         if( current_node->children[0] == NULL)
