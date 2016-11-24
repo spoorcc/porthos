@@ -173,6 +173,79 @@ int _mapper_remove_children(Node * node)
     return (int) result;
 }
 
+/**
+\brief Calculates Z-order from x,y coordinates
+
+\param[in] x X-coordinate
+\param[in] y Y-coordinate
+\param[out] z Z-order
+
+Based on provided X,Y coordinates calculates the Z-order.
+For more information see https://en.wikipedia.org/wiki/Z-order_curve
+
+\pre level must be set using mapper_init
+*/
+int mapper_get_z_order(const int x, const int y, int * z)
+{
+   int result = (int) MAPPER_OK;
+   int size  = pow(2, gl_max_level-1);
+   int i  = 0;
+
+   if (z == NULL)
+   {
+       result = (int) MAPPER_PARAMETER_ERROR;
+   }
+   else
+   {
+       *z = 0;
+
+       for(i=0; i<=size; i+=2)
+       {
+          *z |= (x & (1 << i/2)) << i/2;
+          *z |= (y & (1 << i/2)) << i/2+1;
+       }
+   }
+
+   return (int) result;
+}
+
+/**
+\brief Calculates X,Y coordinates based on Z-order
+
+\param[in] z Z-order
+\param[out] x X-coordinate
+\param[out] y Y-coordinate
+
+Based on provided Z-order calculates the X,Y coordinates.
+For more information see https://en.wikipedia.org/wiki/Z-order_curve
+
+\pre level must be set using mapper_init
+*/
+int mapper_get_xy_from_z_order(const int z, int * x, int * y)
+{
+   int result = (int) MAPPER_OK;
+   int size  = pow(2, gl_max_level-1);
+   int i  = 0;
+
+   if ((x == NULL) || (y == NULL))
+   {
+       result = (int) MAPPER_PARAMETER_ERROR;
+   }
+   else
+   {
+       *x = 0;
+       *y = 0;
+
+       for(i=0; i<=size; i+=2)
+       {
+          *x |= (z & (1 << i)) >> i/2;
+          *y |= (z & (1 << i+1)) >> i/2+1;
+       }
+   }
+
+   return (int) result;
+}
+
 int mapper_print_map()
 {
     char y = 0;

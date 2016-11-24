@@ -31,12 +31,57 @@ START_TEST (test_add_point)
 }
 END_TEST
 
+
+/*! \brief Test getting z order
+*/
+#define NR_GET_Z_ORDER_TESTS (4)
+static const int test_get_z_order_vectors[NR_GET_Z_ORDER_TESTS][3] = {{0,0,0},
+                                                                      {2,0,4},
+                                                                      {0,2,8},
+                                                                      {5,5,0b110011}};
+
+START_TEST (test_get_z_order)
+{
+    int z = 0;
+    CALL(mapper_init(1.0, 1.0, 3));
+
+    CALL(mapper_get_z_order(test_get_z_order_vectors[_i][0],
+                            test_get_z_order_vectors[_i][1], &z));
+    ck_assert_int_eq(z, test_get_z_order_vectors[_i][2]);
+}
+END_TEST
+
+
+/*! \brief Test xy from z order
+*/
+
+#define NR_GET_XY_FROM_Z_ORDER_TESTS (4)
+static const int test_get_xy_from_z_order_vectors[NR_GET_XY_FROM_Z_ORDER_TESTS][3] \
+                                                                   = {{0,0,0},
+                                                                      {2,0,4},
+                                                                      {0,2,8},
+                                                                      {5,5,0b110011}};
+
+START_TEST (test_get_xy_from_z_order)
+{
+    int x = 0;
+    int y = 0;
+    CALL(mapper_init(1.0, 1.0, 3));
+
+    CALL(mapper_get_xy_from_z_order(test_get_xy_from_z_order_vectors[_i][2], &x, &y));
+    ck_assert_int_eq(x, test_get_xy_from_z_order_vectors[_i][0]);
+    ck_assert_int_eq(y, test_get_xy_from_z_order_vectors[_i][1]);
+}
+END_TEST
+
 Suite* mapper (void) {
         Suite *suite = suite_create("range");
         TCase *tcase = tcase_create("GW");
 
         tcase_add_test(tcase, test_init);
         tcase_add_test(tcase, test_add_point);
+        tcase_add_loop_test(tcase, test_get_z_order, 0, NR_GET_Z_ORDER_TESTS);
+        tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
 
         suite_add_tcase(suite, tcase);
         return suite;
