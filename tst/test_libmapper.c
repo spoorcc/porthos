@@ -22,12 +22,32 @@ END_TEST
 */
 START_TEST (test_add_point)
 {
+    CALL(mapper_init(2.0, 2.0, 3));
+
+    CALL(mapper_add_point(1.8, 1.8, MAPPER_BLOCKED));
+    CALL(mapper_add_point(0, 0, MAPPER_BLOCKED));
+
+    CALL(mapper_print_map());
+
+}
+END_TEST
+
+
+/*! \brief Test adding single point
+*/
+START_TEST (test_get_point)
+{
+    MaptileValueEnum value = MAPPER_FREE;
+
     CALL(mapper_init(1.0, 1.0, 2));
 
     CALL(mapper_add_point(.75, .25, MAPPER_BLOCKED));
 
-    CALL(mapper_print_map());
+    CALL(mapper_get_point(.75, .25, &value));
+    ck_assert(value == MAPPER_BLOCKED);
 
+    CALL(mapper_get_point(.25, .75, &value));
+    ck_assert(value == MAPPER_FREE);
 }
 END_TEST
 
@@ -80,6 +100,7 @@ Suite* mapper (void) {
 
         tcase_add_test(tcase, test_init);
         tcase_add_test(tcase, test_add_point);
+        tcase_add_test(tcase, test_get_point);
         tcase_add_loop_test(tcase, test_get_z_order, 0, NR_GET_Z_ORDER_TESTS);
         tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
 

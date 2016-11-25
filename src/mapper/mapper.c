@@ -8,7 +8,7 @@
 typedef struct Node {
 
     struct Node *children[4];
-    MaptileValue value;
+    MaptileValueEnum value;
 
     } Node;
 
@@ -18,7 +18,8 @@ static float gl_size[2] = {1.0, 1.0};
 static int gl_max_level = 1;
 
 
-extern int _mapper_add_children(Node * node);
+static int _mapper_add_children(Node * node);
+static int _mapper_get_node(float x, float y, Node **node, bool add_nodes);
 
 /*! \brief Initializes the mapper library
 */
@@ -38,7 +39,22 @@ int mapper_clear_map()
    /*    \todo  Cleanup memory  */
 }
 
-int mapper_add_point(float x, float y, const MaptileValue value)
+int mapper_add_point(float x, float y, const MaptileValueEnum value)
+{
+    int result = (int) MAPPER_OK;
+    Node * node = NULL;
+
+    result = _mapper_get_node(x, y, &node, true);
+
+    if( result == (int) MAPPER_OK)
+    {
+        node->value = value;
+    }
+
+    return (int) result;
+}
+
+int _mapper_get_node(float x, float y, Node **node, bool add_nodes)
 {
     int result = (int) MAPPER_OK;
     int current_depth = 0;
@@ -46,76 +62,50 @@ int mapper_add_point(float x, float y, const MaptileValue value)
 
     int max_depth = pow(2, gl_max_level);
 
-    Node *current_node = &gl_map;
+    *node = &gl_map;
 
     int ax = x * max_depth / gl_size[0];
     int ay = y * max_depth / gl_size[1];
 
-    for(current_depth=0; (current_depth < gl_max_level) && (result == MAPPER_OK); ++current_depth)
+    for(current_depth=0; (current_depth <= gl_max_level) && (result == MAPPER_OK); ++current_depth)
     {
         /* \todo Cleanup */
         index =  (ax & (1<<(gl_max_level - current_depth)))?1:0;
         index += (ay & (1<<(gl_max_level - current_depth)))?2:0;
 
         /* Create children if needed */
-        if( current_node->children[0] == NULL)
+        if((*node)->children[0] == NULL)
         {
-             result = _mapper_add_children(current_node);
+            if(add_nodes)
+            {
+                result = _mapper_add_children(*node);
+            }
+            else
+            {
+                break;
+            }
         }
 
         /* Get next node*/
         if ( result == MAPPER_OK)
         {
-            current_node = current_node->children[index];
+            *node = (*node)->children[index];
         }
     }
-
-    current_node->value = value;
 
     return (int) result;
 }
 
-int mapper_get_point(float x, float y, MaptileValue * value)
+int mapper_get_point(float x, float y, MaptileValueEnum * value)
 {
     int result = (int) MAPPER_OK;
-    char current_depth = 0;
-    char index = 0;
-    float half_x, half_y;
+    Node *node = NULL;
 
-    Node *current_node = &gl_map;
+    result = _mapper_get_node(x, y, &node, false);
 
-    while( (current_depth < gl_max_level) && (result == MAPPER_OK))
+    if(result == (int) MAPPER_OK)
     {
-        /* Return value of lowest node */
-        if( current_node->children[0] == NULL)
-        {
-             *value = current_node->value;
-             break;
-        }
-
-        ++current_depth;
-        half_x = gl_size[0] / powf(2, current_depth);
-        half_y = gl_size[1] / powf(2, current_depth);
-
-        /* West if x < 0.0 */
-        if(x < half_x)
-        {
-            index = 0;
-        }
-        else
-        {
-            index = 1;
-            x -= half_x;
-        }
-
-        /* South if y in bottom */
-        if(y >= half_y)
-        {
-            index += 2;
-            y -= half_y;
-        }
-
-        current_node = current_node->children[index];
+        *value = node->value;
     }
 
     return (int) result;
@@ -234,62 +224,25 @@ int mapper_get_xy_from_z_order(const int z, int * x, int * y)
 
 int mapper_print_map()
 {
-    char y = 0;
-    char x = 0;
-    int width  = pow(2, gl_max_level);
-    int height = pow(2, gl_max_level);
+    int result = (int) MAPPER_OK;
+    float y = 0;
+    float x = 0;
 
-    int half_x = 0;
-    int half_y = 0;
-    int index = 0;
+    float dx = gl_size[0] / pow(2, gl_max_level);
+    float dy = gl_size[1] / pow(2, gl_max_level);
 
-    Node *current_node = &gl_map;
-    MaptileValue value = MAPPER_FREE;
+    MaptileValueEnum value = MAPPER_FREE;
 
-    int *index_stack = malloc(gl_max_level * sizeof(int));
-    char current_depth = 0;
-    char *map = calloc( (width + 1) * height, sizeof(char));
-
-    for(y=0; y<height; ++y)
+    for(y=0; y<gl_size[1]; y+=dy)
     {
-        for(x=0; x<width; ++x)
+        for(x=0; x<gl_size[0]; x+=dx)
         {
-            current_node = &gl_map;
-            char tx = x;
-            char ty = y;
-            while(current_node != NULL)
-            {
-                ++current_depth;
-                value = current_node->value;
-                half_x = width / (1+current_depth);
-                half_y = height / (1+current_depth);
+            result = mapper_get_point(x, y, &value);
 
-                /* West if x < 0.0 */
-                if(tx < half_x)
-                {
-                    index = 0;
-                }
-                else
-                {
-                    index = 1;
-                    tx -= half_x;
-                }
-
-                /* South if y in bottom */
-                if(ty >= half_y)
-                {
-                    index += 2;
-                    ty -= half_y;
-                }
-
-                current_node = current_node->children[index];
-            }
-            fprintf(stderr, "%s", value==MAPPER_BLOCKED?"X":".");
+            fprintf(stderr, "%s", value==MAPPER_BLOCKED?" X":" .");
         }
         fprintf(stderr, "\n");
     }
-
-    free(index_stack);
 
     return (int) MAPPER_OK;
 }
