@@ -17,10 +17,10 @@ static Node gl_map = {0};
 static float gl_size[2] = {1.0, 1.0};
 static int gl_max_level = 1;
 
-
+/* Module forward declarations */
 static int _mapper_add_children(Node * node);
 static int _mapper_remove_children(Node * node);
-static int _mapper_get_node(float x, float y, Node **node, bool add_nodes, Node **parent);
+static int _mapper_get_node(float x, float y, Node **node, bool add_nodes, Node **parent, int *depth);
 static int _mapper_flatten_node(Node * node);
 
 /*! \brief Initializes the mapper library
@@ -58,7 +58,7 @@ int mapper_add_point(float x, float y, const MaptileValueEnum value)
     Node * node = NULL;
     Node * parent = NULL;
 
-    result = _mapper_get_node(x, y, &node, true, &parent);
+    result = _mapper_get_node(x, y, &node, true, &parent, NULL);
 
     if( result == (int) MAPPER_OK)
     {
@@ -71,7 +71,7 @@ int mapper_add_point(float x, float y, const MaptileValueEnum value)
 }
 
 int _mapper_get_node(float x, float y, Node **node,
-                     bool add_nodes, Node **parent)
+                     bool add_nodes, Node **parent, int * depth)
 {
     int result = (int) MAPPER_OK;
     int current_depth = 0;
@@ -112,6 +112,11 @@ int _mapper_get_node(float x, float y, Node **node,
         }
     }
 
+    if(depth != NULL)
+    {
+        *depth = current_depth;
+    }
+
     return (int) result;
 }
 
@@ -132,7 +137,7 @@ int mapper_get_point(float x, float y, MaptileValueEnum * value)
     Node *node = NULL;
     Node *parent = NULL;
 
-    result = _mapper_get_node(x, y, &node, false, &parent);
+    result = _mapper_get_node(x, y, &node, false, &parent, NULL);
 
     if(result == (int) MAPPER_OK)
     {
@@ -144,6 +149,12 @@ int mapper_get_point(float x, float y, MaptileValueEnum * value)
 
 /**
 \brief Adds 4 new children to given node
+
+\param[in] node Pointer node to add children to
+
+\retval MAPPER_OK              Everything went OK
+\retval MAPPER_PARAMETER_ERROR One of the children already exists
+\retval MAPPER_MEMORY_ERROR    Allocating memory went wrong
 */
 int _mapper_add_children(Node * node)
 {
@@ -316,9 +327,14 @@ int mapper_get_xy_from_z_order(const int z, int * x, int * y)
    return (int) result;
 }
 
-int mapper_print_map()
+int mapper_print_map(bool with_depth)
 {
     int result = (int) MAPPER_OK;
+
+    Node * node = NULL;
+    Node * parent = NULL;
+    int depth = 0;
+
     float y = 0;
     float x = 0;
 
@@ -331,9 +347,9 @@ int mapper_print_map()
     {
         for(x=0; x<gl_size[0]; x+=dx)
         {
-            result = mapper_get_point(x, y, &value);
-
-            fprintf(stderr, "%s", value==MAPPER_BLOCKED?" X":value==MAPPER_UNKNOWN?" ?":" .");
+            result = _mapper_get_node(x, y, &node, false, &parent, &depth);
+            value = node->value;
+            fprintf(stderr, "%c%s", with_depth?depth+0x30:0x20, value==MAPPER_BLOCKED?"X":value==MAPPER_UNKNOWN?"?":".");
         }
         fprintf(stderr, "\n");
     }

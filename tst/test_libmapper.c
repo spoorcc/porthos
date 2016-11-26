@@ -22,7 +22,7 @@ END_TEST
 */
 START_TEST (test_add_point)
 {
-    CALL(mapper_init(2.0, 2.0, 2));
+    CALL(mapper_init(2.0, 2.0, 4));
 
     CALL(mapper_add_point(1.8, 1.8, MAPPER_BLOCKED));
     CALL(mapper_add_point(0.0, 0.0, MAPPER_BLOCKED));
@@ -32,7 +32,9 @@ START_TEST (test_add_point)
     CALL(mapper_add_point(1.8, 0.0, MAPPER_FREE));
     CALL(mapper_add_point(1.8, 0.8, MAPPER_FREE));
 
-    CALL(mapper_print_map());
+    CALL(mapper_print_map(true));
+    fprintf(stderr, "\n");
+    CALL(mapper_print_map(false));
 }
 END_TEST
 
