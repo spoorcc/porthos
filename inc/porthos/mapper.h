@@ -4,12 +4,10 @@ typedef enum {MAPPER_OK = 0,          /*!< Everything went OK */ \
               MAPPER_MEMORY_ERROR     /*!< Memory issues */
              } MapperError;
 
-//typedef enum {MAPPER_FREE = 0,
-//              MAPPER_BLOCKED
-//             } MaptileValue;
 #define FOREACH_MAPPER_TILE_VALUE(TILE_VALUE) \
-                    TILE_VALUE(MAPPER_FREE)   \
-                    TILE_VALUE(MAPPER_BLOCKED) \
+                    TILE_VALUE(MAPPER_UNKNOWN)  \
+                    TILE_VALUE(MAPPER_FREE)     \
+                    TILE_VALUE(MAPPER_BLOCKED)  \
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
@@ -33,7 +31,6 @@ extern int mapper_get_point(float x, float y, MaptileValueEnum * value);
 extern int mapper_print_map();
 
 extern int mapper_get_z_order(const int x, const int y, int * z);
-
 extern int mapper_get_xy_from_z_order(const int z, int * x, int * y);
 
 
