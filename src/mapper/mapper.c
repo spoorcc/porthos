@@ -12,6 +12,9 @@ typedef struct Node {
 
     } Node;
 
+typedef int (*node_cb_func)(Node *node);
+
+/* Module globals */
 static Node gl_map = {0};
 
 static float gl_size[2] = {1.0, 1.0};
@@ -22,6 +25,8 @@ static int _mapper_add_children(Node * node);
 static int _mapper_remove_children(Node * node);
 static int _mapper_get_node(float x, float y, Node **node, bool add_nodes, Node **parent, int *depth);
 static int _mapper_flatten_node(Node * node);
+static int _mapper_visit_graph(Node *root_node,
+                         node_cb_func callback_func);
 
 /*! \brief Initializes the mapper library
 */
@@ -70,6 +75,25 @@ int mapper_add_point(float x, float y, const MaptileValueEnum value)
     return (int) result;
 }
 
+int _mapper_test_cb(Node * node)
+{
+    if(node->children[0] == NULL)
+    {
+        fprintf(stderr, "%s\n", MaptileValueStr[node->value]);
+    }
+
+    return (int) MAPPER_OK;
+}
+
+int mapper_set_area(float x1, float y1, float x2, float y2, MaptileValueEnum value)
+{
+    int result = (int) MAPPER_OK;
+
+    result = _mapper_visit_graph(NULL, _mapper_test_cb);
+
+    return result;
+}
+
 int _mapper_get_node(float x, float y, Node **node,
                      bool add_nodes, Node **parent, int * depth)
 {
@@ -115,6 +139,34 @@ int _mapper_get_node(float x, float y, Node **node,
     if(depth != NULL)
     {
         *depth = current_depth;
+    }
+
+    return (int) result;
+}
+
+static int _mapper_visit_graph(Node *root_node,
+                         node_cb_func callback_func)
+{
+    int result = (int) MAPPER_OK;
+    char i = 0;
+
+    Node * node = &gl_map;
+
+    if( root_node != NULL)
+    {
+        node = root_node;
+    }
+
+    result = callback_func(node);
+
+    for(i=0; (i<4)&&(result==MAPPER_OK); ++i)
+    {
+        fprintf(stderr, "Visit: %d\n", i);
+        if(node->children[i] != NULL)
+        {
+            /* TODO Make non-recursive */
+            result = _mapper_visit_graph(node->children[i], callback_func);
+        }
     }
 
     return (int) result;
@@ -327,6 +379,11 @@ int mapper_get_xy_from_z_order(const int z, int * x, int * y)
    return (int) result;
 }
 
+/**
+\brief Print the map on stderr
+
+\param[in] with_depth If enabled, depth of graph-node is shown
+*/
 int mapper_print_map(bool with_depth)
 {
     int result = (int) MAPPER_OK;
