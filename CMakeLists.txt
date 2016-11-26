@@ -10,11 +10,8 @@ OPTION(BUILD_PORTHOS_DOCUMENTATION "Create doxygen documentation for developers"
 
 include_directories(inc)
 
+enable_testing()
+
 add_subdirectory(src)
 add_subdirectory(doc)
 add_subdirectory(tst)
-
-enable_testing ()
-add_test (NAME libmotion COMMAND test_libmotion)
-add_test (NAME librange  COMMAND test_librange)
-add_test (NAME libmapper COMMAND test_libmapper)
