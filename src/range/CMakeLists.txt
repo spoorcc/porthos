@@ -1,2 +1,2 @@
-add_library(range SHARED range.c range.h)
+add_library(range SHARED range.c)
 

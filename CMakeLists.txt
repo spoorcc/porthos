@@ -8,9 +8,7 @@ SET ( PORTHOS_SUBTITLE "An-embedded-linux-robot" )
 SET ( PORTHOS_VERSION "0.0.0-cmake" )
 OPTION(BUILD_PORTHOS_DOCUMENTATION "Create doxygen documentation for developers" ON)
 
-include_directories(src/motion)
-include_directories(src/range)
-include_directories(src/mapper)
+include_directories(inc)
 
 add_subdirectory(src)
 add_subdirectory(doc)

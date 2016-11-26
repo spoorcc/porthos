@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "mapper.h"
+#include "porthos/mapper.h"
 
 typedef struct Node {
 

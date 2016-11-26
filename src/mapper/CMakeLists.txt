@@ -1,2 +1,2 @@
-add_library(mapper SHARED mapper.c mapper.h)
+add_library(mapper SHARED mapper.c)
 target_link_libraries(mapper m)
