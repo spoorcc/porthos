@@ -68,7 +68,8 @@ START_TEST (test_set_area)
     CALL(mapper_add_point(.75, .25, MAPPER_BLOCKED));
 
     CALL(mapper_print_map(true));
-    CALL(mapper_set_area(0.0, 0.0, 0.5, 0.5, value));
+    CALL(mapper_set_area(0.0, 0.0, 0.4, 0.4, value));
+    CALL(mapper_print_map(true));
 }
 END_TEST
 
