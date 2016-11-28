@@ -357,12 +357,13 @@ int _mapper_add_children(Node * node)
        }
     }
 
-    /* Cleanup if there is an error */
+    /* Cleanup if there is an error during allocation */
     if( result != MAPPER_OK )
     {
         for(i=0; i<4; ++i)
         {
-            if(node->children[i] != NULL)
+            if((result == MAPPER_MEMORY_ERROR) &&
+               (node != NULL) && (node->children[i] != NULL))
             {
                 free(node->children[i]);
                 node->children[i] = NULL;

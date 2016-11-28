@@ -9,6 +9,9 @@
 #define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
 #define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-6), msg);
 
+
+Node node = {0};
+
 /*! \brief Test initialization
 
 Test initialization of Mapper library
@@ -45,7 +48,6 @@ END_TEST
  *  Testing add_children functions
  *  @{
  */
-Node node = {0};
 
 START_TEST (test_add_children_setup)
 {
@@ -65,6 +67,8 @@ START_TEST (test_add_children_teardown)
             free(node.children[i]);
         }
     }
+
+    memset(&node, 0, sizeof(Node));
 }
 END_TEST
 
@@ -72,6 +76,10 @@ END_TEST
 START_TEST (test_add_children_GW001)
 {
     int i = 0;
+
+    //fprintf(stderr, "Node %p\n", &node);
+    //for(i=0; i<4; ++i)
+    //    fprintf(stderr, "\t->child[%d] = %p\n",i, node.children[i]);
 
     CALL(_mapper_add_children(&node));
 
@@ -91,7 +99,7 @@ START_TEST (test_add_children_GW002)
 
     for(i=0; i<4; ++i)
     {
-        ck_assert(node.children[i].value == node.value);
+        ck_assert(node.children[i]->value == node.value);
     }
 }
 END_TEST
@@ -118,10 +126,6 @@ START_TEST (test_add_children_BW001)
     int result = _mapper_add_children(NULL);
 
     ck_assert(result == MAPPER_PARAMETER_ERROR);
-    for(i=0; i<4; ++i)
-    {
-        ck_assert(node.children[i] == NULL);
-    }
 }
 END_TEST
 
@@ -130,15 +134,21 @@ START_TEST (test_add_children_BW002)
 {
     int i = 0;
 
+    Node child = {0};
+
     /* Make child non-NULL */
-    node.children[2] = &node;
-    int result = _mapper_add_children(NULL);
+    node.children[0] = &child;
+    int result = _mapper_add_children(&node);
 
     ck_assert(result == MAPPER_PARAMETER_ERROR);
-    for(i=0; i<4; ++i)
+
+    /* First node was made non-NULL, others must be untouched */
+    for(i=1; i<4; ++i)
     {
         ck_assert(node.children[i] == NULL);
     }
+
+    node.children[0] = NULL;
 }
 END_TEST
 /** @}*/
@@ -150,10 +160,10 @@ END_TEST
  *  Testing remove_children functions
  *  @{
  */
-Node node = {0};
-
 START_TEST (test_remove_children_setup)
 {
+    memset(&node,0,sizeof(Node));
+
     node.z_order_start = 0;
     node.z_order_end = 3;
 
@@ -313,9 +323,12 @@ Suite* mapper (void) {
         tcase_add_checked_fixture(remove_children_tcase,
                                   test_remove_children_setup,
                                   test_remove_children_teardown);
+        tcase_add_test(remove_children_tcase, test_remove_children_GW001);
+        tcase_add_test(remove_children_tcase, test_remove_children_GW002);
 
-        suite_add_tcase(suite, test_remove_children_GW001);
-        suite_add_tcase(suite, test_remove_children_GW002);
+        suite_add_tcase(suite, tcase);
+        suite_add_tcase(suite, add_children_tcase);
+        suite_add_tcase(suite, remove_children_tcase);
         return suite;
 }
 
