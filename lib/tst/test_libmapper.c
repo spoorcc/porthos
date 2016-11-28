@@ -39,7 +39,7 @@ START_TEST (test_add_point)
 }
 END_TEST
 
-
+/*----------------------------------------------------------------------------*/
 /** \internal
  *  \addtogroup test_add_children
  *  Testing add_children functions
@@ -91,7 +91,7 @@ START_TEST (test_add_children_GW002)
 
     for(i=0; i<4; ++i)
     {
-        ck_assert(node.children[i] == node.value);
+        ck_assert(node.children[i].value == node.value);
     }
 }
 END_TEST
@@ -135,6 +135,70 @@ START_TEST (test_add_children_BW002)
     int result = _mapper_add_children(NULL);
 
     ck_assert(result == MAPPER_PARAMETER_ERROR);
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == NULL);
+    }
+}
+END_TEST
+/** @}*/
+
+
+/*----------------------------------------------------------------------------*/
+/** \internal
+ *  \addtogroup test_remove_children
+ *  Testing remove_children functions
+ *  @{
+ */
+Node node = {0};
+
+START_TEST (test_remove_children_setup)
+{
+    node.z_order_start = 0;
+    node.z_order_end = 3;
+
+    CALL(_mapper_add_children(&node));
+}
+END_TEST
+
+START_TEST (test_remove_children_teardown)
+{
+    int i = 0;
+
+    for(i=0; i<4; ++i)
+    {
+        if(node.children[i] != NULL)
+        {
+            free(node.children[i]);
+        }
+    }
+}
+END_TEST
+
+/** \brief Remove children from node */
+START_TEST (test_remove_children_GW001)
+{
+    int i = 0;
+
+    CALL(_mapper_remove_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == NULL);
+    }
+}
+END_TEST
+
+/** \brief Even if one child is NULL, mustn't fail */
+START_TEST (test_remove_children_GW002)
+{
+    int i = 0;
+
+    free(node.children[1]);
+    node.children[1] = NULL;
+
+    CALL(_mapper_remove_children(&node));
+
     for(i=0; i<4; ++i)
     {
         ck_assert(node.children[i] == NULL);
@@ -233,6 +297,7 @@ Suite* mapper (void) {
         tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
 
 
+        /* Add children */
         TCase *add_children_tcase = tcase_create("GW");
         tcase_add_checked_fixture(add_children_tcase,
                                   test_add_children_setup,
@@ -243,7 +308,14 @@ Suite* mapper (void) {
         tcase_add_test(add_children_tcase, test_add_children_BW001);
         tcase_add_test(add_children_tcase, test_add_children_BW002);
 
-        suite_add_tcase(suite, tcase);
+        /* Remove children */
+        TCase *remove_children_tcase = tcase_create("GW");
+        tcase_add_checked_fixture(remove_children_tcase,
+                                  test_remove_children_setup,
+                                  test_remove_children_teardown);
+
+        suite_add_tcase(suite, test_remove_children_GW001);
+        suite_add_tcase(suite, test_remove_children_GW002);
         return suite;
 }
 
