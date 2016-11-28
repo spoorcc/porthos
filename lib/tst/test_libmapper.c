@@ -39,12 +39,38 @@ START_TEST (test_add_point)
 }
 END_TEST
 
-START_TEST (test_add_children)
+
+/** \internal
+ *  \addtogroup test_add_children
+ *  Testing add_children functions
+ *  @{
+ */
+Node node = {0};
+
+START_TEST (test_add_children_setup)
 {
-    int i = 0;
-    Node node = {0};
     node.z_order_start = 0;
     node.z_order_end = 3;
+}
+END_TEST
+
+START_TEST (test_add_children_teardown)
+{
+    int i = 0;
+
+    for(i=0; i<4; ++i)
+    {
+        if(node.children[i] != NULL)
+        {
+            free(node.children[i]);
+        }
+    }
+}
+END_TEST
+
+START_TEST (test_add_children_GW001)
+{
+    int i = 0;
 
     CALL(_mapper_add_children(&node));
 
@@ -55,7 +81,7 @@ START_TEST (test_add_children)
     }
 }
 END_TEST
-
+/** @}*/
 
 /*! \brief Test adding single point
 */
@@ -147,7 +173,11 @@ Suite* mapper (void) {
         tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
 
 
-        tcase_add_test(tcase, test_add_children);
+        TCase *add_children_tcase = tcase_create("GW");
+        tcase_add_checked_fixture(add_children_tcase,
+                                  test_add_children_setup,
+                                  test_add_children_teardown);
+        tcase_add_test(add_children_tcase, test_add_children_GW001);
 
         suite_add_tcase(suite, tcase);
         return suite;
