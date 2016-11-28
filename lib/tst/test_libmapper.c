@@ -68,6 +68,7 @@ START_TEST (test_add_children_teardown)
 }
 END_TEST
 
+/** \brief Add children to node */
 START_TEST (test_add_children_GW001)
 {
     int i = 0;
@@ -77,7 +78,66 @@ START_TEST (test_add_children_GW001)
     for(i=0; i<4; ++i)
     {
         ck_assert(node.children[i] != NULL);
-        free(node.children[i]);
+    }
+}
+END_TEST
+
+/** \brief Children must get same value */
+START_TEST (test_add_children_GW002)
+{
+    int i = 0;
+
+    CALL(_mapper_add_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == node.value);
+    }
+}
+END_TEST
+
+/** \brief Children must get proper z-order */
+START_TEST (test_add_children_GW003)
+{
+    int i = 0;
+
+    CALL(_mapper_add_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i]->z_order_start == i);
+        ck_assert(node.children[i]->z_order_end == i);
+    }
+}
+END_TEST
+
+/** \brief Providing NULL must fail */
+START_TEST (test_add_children_BW001)
+{
+    int i = 0;
+    int result = _mapper_add_children(NULL);
+
+    ck_assert(result == MAPPER_PARAMETER_ERROR);
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == NULL);
+    }
+}
+END_TEST
+
+/** \brief No children may be non-NULL*/
+START_TEST (test_add_children_BW002)
+{
+    int i = 0;
+
+    /* Make child non-NULL */
+    node.children[2] = &node;
+    int result = _mapper_add_children(NULL);
+
+    ck_assert(result == MAPPER_PARAMETER_ERROR);
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == NULL);
     }
 }
 END_TEST
@@ -178,6 +238,10 @@ Suite* mapper (void) {
                                   test_add_children_setup,
                                   test_add_children_teardown);
         tcase_add_test(add_children_tcase, test_add_children_GW001);
+        tcase_add_test(add_children_tcase, test_add_children_GW002);
+        tcase_add_test(add_children_tcase, test_add_children_GW003);
+        tcase_add_test(add_children_tcase, test_add_children_BW001);
+        tcase_add_test(add_children_tcase, test_add_children_BW002);
 
         suite_add_tcase(suite, tcase);
         return suite;
