@@ -1,6 +1,7 @@
 #include <check.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "porthos/mapper.h"
 
@@ -49,14 +50,13 @@ END_TEST
  *  @{
  */
 
-START_TEST (test_add_children_setup)
+void test_add_children_setup(void)
 {
     node.z_order_start = 0;
     node.z_order_end = 3;
 }
-END_TEST
 
-START_TEST (test_add_children_teardown)
+void test_cleanup_node_teardown()
 {
     int i = 0;
 
@@ -70,16 +70,11 @@ START_TEST (test_add_children_teardown)
 
     memset(&node, 0, sizeof(Node));
 }
-END_TEST
 
 /** \brief Add children to node */
 START_TEST (test_add_children_GW001)
 {
     int i = 0;
-
-    //fprintf(stderr, "Node %p\n", &node);
-    //for(i=0; i<4; ++i)
-    //    fprintf(stderr, "\t->child[%d] = %p\n",i, node.children[i]);
 
     CALL(_mapper_add_children(&node));
 
@@ -160,30 +155,13 @@ END_TEST
  *  Testing remove_children functions
  *  @{
  */
-START_TEST (test_remove_children_setup)
+void test_remove_children_setup()
 {
-    memset(&node,0,sizeof(Node));
-
     node.z_order_start = 0;
     node.z_order_end = 3;
 
     CALL(_mapper_add_children(&node));
 }
-END_TEST
-
-START_TEST (test_remove_children_teardown)
-{
-    int i = 0;
-
-    for(i=0; i<4; ++i)
-    {
-        if(node.children[i] != NULL)
-        {
-            free(node.children[i]);
-        }
-    }
-}
-END_TEST
 
 /** \brief Remove children from node */
 START_TEST (test_remove_children_GW001)
@@ -215,6 +193,78 @@ START_TEST (test_remove_children_GW002)
     }
 }
 END_TEST
+/** @}*/
+
+/*----------------------------------------------------------------------------*/
+/** \internal
+ *  \addtogroup test_flatten_node
+ *  Testing _mapper_flatten_node functions
+ *  @{
+ */
+void test_flatten_node_setup()
+{
+    node.z_order_start = 0;
+    node.z_order_end = 3;
+
+    node.value = MAPPER_BLOCKED;
+
+    CALL(_mapper_add_children(&node));
+}
+
+/** \brief Flatten node removes all children if they all have same value */
+START_TEST (test_flatten_node_GW001)
+{
+    int i = 0;
+
+    CALL(_mapper_flatten_node(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] == NULL);
+    }
+}
+END_TEST
+
+/** \brief Parent node gets value of children */
+START_TEST (test_flatten_node_GW002)
+{
+    node.value = MAPPER_UNKNOWN;
+
+    CALL(_mapper_flatten_node(&node));
+
+    ck_assert(node.value == MAPPER_BLOCKED);
+
+}
+END_TEST
+
+
+/** \brief If one value different, no flattening */
+START_TEST (test_flatten_node_GW003)
+{
+    int i = 0;
+
+    node.children[i]->value = MAPPER_FREE;
+
+    CALL(_mapper_flatten_node(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] != NULL);
+    }
+}
+END_TEST
+
+/** \brief NULL parameter results in MAPPER_PARAMETER_ERROR */
+START_TEST (test_flatten_node_BW001)
+{
+    int result = MAPPER_OK;
+
+    result = _mapper_flatten_node(NULL);
+
+    ck_assert(result == MAPPER_PARAMETER_ERROR);
+}
+END_TEST
+
 /** @}*/
 
 /*! \brief Test adding single point
@@ -308,10 +358,10 @@ Suite* mapper (void) {
 
 
         /* Add children */
-        TCase *add_children_tcase = tcase_create("GW");
+        TCase *add_children_tcase = tcase_create("add_children");
         tcase_add_checked_fixture(add_children_tcase,
                                   test_add_children_setup,
-                                  test_add_children_teardown);
+                                  test_cleanup_node_teardown);
         tcase_add_test(add_children_tcase, test_add_children_GW001);
         tcase_add_test(add_children_tcase, test_add_children_GW002);
         tcase_add_test(add_children_tcase, test_add_children_GW003);
@@ -319,16 +369,27 @@ Suite* mapper (void) {
         tcase_add_test(add_children_tcase, test_add_children_BW002);
 
         /* Remove children */
-        TCase *remove_children_tcase = tcase_create("GW");
+        TCase *remove_children_tcase = tcase_create("remove_children");
         tcase_add_checked_fixture(remove_children_tcase,
                                   test_remove_children_setup,
-                                  test_remove_children_teardown);
+                                  test_cleanup_node_teardown);
         tcase_add_test(remove_children_tcase, test_remove_children_GW001);
         tcase_add_test(remove_children_tcase, test_remove_children_GW002);
+
+        /* Flatten node */
+        TCase *flatten_node_tcase = tcase_create("flatten_node");
+        tcase_add_checked_fixture(flatten_node_tcase,
+                                  test_flatten_node_setup,
+                                  test_cleanup_node_teardown);
+        tcase_add_test(flatten_node_tcase, test_flatten_node_GW001);
+        tcase_add_test(flatten_node_tcase, test_flatten_node_GW002);
+        tcase_add_test(flatten_node_tcase, test_flatten_node_GW003);
+        tcase_add_test(flatten_node_tcase, test_flatten_node_BW001);
 
         suite_add_tcase(suite, tcase);
         suite_add_tcase(suite, add_children_tcase);
         suite_add_tcase(suite, remove_children_tcase);
+        suite_add_tcase(suite, flatten_node_tcase);
         return suite;
 }
 

@@ -395,7 +395,7 @@ int _mapper_flatten_node(Node * node)
           if((node->children[i] != NULL) &&
              (node->children[i+1] != NULL))
           {
-              same_value = (node->children[i]->value != node->children[i+1]->value);
+              same_value = (node->children[i]->value == node->children[i+1]->value);
           }
        }
        if(same_value)
