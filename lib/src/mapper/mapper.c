@@ -3,33 +3,17 @@
 #include <stdlib.h>
 #include <math.h>
 
+/* Public interface */
 #include "porthos/mapper.h"
 
-typedef struct Node {
-
-    struct Node *children[4];
-    int z_order_start;
-    int z_order_end;
-    MaptileValueEnum value;
-
-    } Node;
-
-typedef int (*node_cb_func)(Node **node);
+/* Private interface */
+#include "mapper/mapper_internal.h"
 
 /* Module globals */
 static Node gl_map = {0};
 
 static float gl_size[2] = {1.0, 1.0};
 static int gl_max_level = 1;
-
-/* Module forward declarations */
-static int _mapper_add_children(Node * node);
-static int _mapper_remove_children(Node * node);
-static int _mapper_get_node(float x, float y, Node **node, bool add_nodes, Node **parent, int *depth);
-static int _mapper_flatten_node(Node * node);
-static int _mapper_visit_graph(Node *node,
-                         node_cb_func callback_func);
-static bool _mapper_node_has_children(Node * node);
 
 /** \addtogroup mapper-library
  *  Library for keeping map of surroundings
@@ -64,7 +48,7 @@ int mapper_init(float x_size, float y_size, unsigned int max_level)
     return (int) MAPPER_OK;
 }
 
-static int _mapper_remove_childless_nodes_cb(Node ** node)
+int _mapper_remove_childless_nodes_cb(Node ** node)
 {
     int i = 0;
 
@@ -76,7 +60,7 @@ static int _mapper_remove_childless_nodes_cb(Node ** node)
     return (int) MAPPER_OK;
 }
 
-static bool _mapper_node_has_children(Node * node)
+bool _mapper_node_has_children(Node * node)
 {
     bool has_children = false;
     int i = 0;
@@ -269,7 +253,7 @@ int _mapper_get_node(float x, float y, Node **node,
     return (int) result;
 }
 
-static int _mapper_visit_graph(Node *node,
+int _mapper_visit_graph(Node *node,
                                node_cb_func callback_func)
 {
     int result = (int) MAPPER_OK;
@@ -427,7 +411,7 @@ int _mapper_flatten_node(Node * node)
 /**
 \brief Frees memory of all non-NULL children pointers
 */
-static int _mapper_remove_children(Node * node)
+int _mapper_remove_children(Node * node)
 {
     int result = (int) MAPPER_OK;
     char i = 0;

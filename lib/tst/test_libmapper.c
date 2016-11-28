@@ -4,6 +4,8 @@
 
 #include "porthos/mapper.h"
 
+#include "mapper/mapper_internal.h"
+
 #define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
 #define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-6), msg);
 
@@ -34,6 +36,23 @@ START_TEST (test_add_point)
     CALL(mapper_print_map(true));
     fprintf(stderr, "\n");
     CALL(mapper_print_map(false));
+}
+END_TEST
+
+START_TEST (test_add_children)
+{
+    int i = 0;
+    Node node = {0};
+    node.z_order_start = 0;
+    node.z_order_end = 3;
+
+    CALL(_mapper_add_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert(node.children[i] != NULL);
+        free(node.children[i]);
+    }
 }
 END_TEST
 
@@ -126,6 +145,9 @@ Suite* mapper (void) {
         tcase_add_test(tcase, test_set_area);
         tcase_add_loop_test(tcase, test_get_z_order, 0, NR_GET_Z_ORDER_TESTS);
         tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
+
+
+        tcase_add_test(tcase, test_add_children);
 
         suite_add_tcase(suite, tcase);
         return suite;

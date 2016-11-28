@@ -12,6 +12,5 @@ include_directories(inc)
 
 enable_testing()
 
-add_subdirectory(src)
+add_subdirectory(lib)
 add_subdirectory(doc)
-add_subdirectory(tst)
