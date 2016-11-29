@@ -26,3 +26,8 @@ Generating documentation
 
     cd bld
     make doc
+
+Backgournd info
+---------------
+
+https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-412j-cognitive-robotics-spring-2005/projects/1aslam_blas_repo.pdf
