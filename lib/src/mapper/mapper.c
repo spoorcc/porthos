@@ -13,10 +13,14 @@
 static Node gl_map = {0};
 
 static float gl_size[2] = {1.0, 1.0};
-static int gl_max_level = 1;
+static int gl_max_level_nr = 1;
+
+static float gl_dx = 0.0;
+static float gl_dy = 0.0;
 
 /** \addtogroup mapper-library
  *  Library for keeping map of surroundings
+ *
  *  @{
  */
 
@@ -27,9 +31,40 @@ static int gl_max_level = 1;
 \param[in] max_level  Two to the max_level of detail
 
 First mapper_init must be called to configure the library. With this call the
-real-world size that the map spans is set. The max_level sets the 2 to the Nth 
+real-world size that the map spans is set. The max_level sets the 2 to the Nth
 maximum level of detail. For example max_level of 2 means the map will be divided
 in 4x4 grid.
+
+\internal
+A map is created using a quadtree. A graph without children has max_level 0.
+
+0
+
+11
+11
+
+2222
+2222
+2222
+2222
+
+0 --> 1 --> 2
+            2
+            2
+            2
+      1 --> 2
+            2
+            2
+            2
+      1 --> 2
+            2
+            2
+            2
+      1 --> 2
+            2
+            2
+            2
+\endinternal
 */
 int mapper_init(float x_size, float y_size, unsigned int max_level)
 {
@@ -38,12 +73,15 @@ int mapper_init(float x_size, float y_size, unsigned int max_level)
     /* Store settings */
     gl_size[0] = x_size;
     gl_size[1] = y_size;
-    gl_max_level = max_level;
+    gl_max_level_nr = max_level;
+
+    gl_dx = gl_size[0] / pow(2, gl_max_level_nr);
+    gl_dy = gl_size[1] / pow(2, gl_max_level_nr);
 
     /* Initialize root-node */
     gl_map.value = MAPPER_UNKNOWN;
     gl_map.z_order_start = 0;
-    gl_map.z_order_end = pow(2, gl_max_level+2)-1;
+    gl_map.z_order_end = pow(2, gl_max_level_nr+1)-1;
 
     return (int) MAPPER_OK;
 }
@@ -182,7 +220,7 @@ int mapper_set_area(float x1, float y1, float x2, float y2, MaptileValueEnum val
 {
     int result = (int) MAPPER_OK;
 
-    int max_depth = pow(2, gl_max_level+1);
+    int max_depth = pow(2, gl_max_level_nr+1);
 
     if((x1 >= x2) || (y1 >= y2))
     {
@@ -203,6 +241,34 @@ int mapper_set_area(float x1, float y1, float x2, float y2, MaptileValueEnum val
     return result;
 }
 
+
+
+unsigned int _mapper_index_from_abs_coords(unsigned int ax,
+                                                  unsigned int ay,
+                                                  unsigned int max_depth,
+                                                  unsigned int current_depth)
+{
+    /* \todo Cleanup */
+    int index = 0;
+    index =  (ax & (1<<(max_depth - current_depth)))?1:0;
+    index += (ay & (1<<(max_depth - current_depth)))?2:0;
+
+    return index;
+}
+/**
+
+\param[in] x
+\param[in] y
+\param[out] node
+\param[in] add_nodes
+\param[out] parent
+\param[out] depth
+
+Gets the node at the given x,y coordinates provided
+
+\retval MAPPER_OK              All went well
+\retval MAPPER_PARAMETER_ERROR Coordinates are not OK
+*/
 int _mapper_get_node(float x, float y, Node **node,
                      bool add_nodes, Node **parent, int * depth)
 {
@@ -210,19 +276,22 @@ int _mapper_get_node(float x, float y, Node **node,
     int current_depth = 0;
     int index = 0;
 
-    int max_depth = pow(2, gl_max_level+1);
-
+    // \todo Always start at root?
     *node = &gl_map;
+
+    // \todo Warn that parent is not NULL
     *parent = NULL;
 
-    int ax = x * max_depth / gl_size[0];
-    int ay = y * max_depth / gl_size[1];
+    int ax = x / gl_dx;
+    int ay = y / gl_dy;
 
-    for(current_depth=0; (current_depth < gl_max_level) && (result == MAPPER_OK); ++current_depth)
+    //fprintf(stderr, "Abs coords %d,%d\n", ax, ay);
+
+    for(current_depth=0; (current_depth < gl_max_level_nr) && (result == MAPPER_OK); ++current_depth)
     {
-        /* \todo Cleanup */
-        index =  (ax & (1<<(gl_max_level - current_depth)))?1:0;
-        index += (ay & (1<<(gl_max_level - current_depth)))?2:0;
+        index = _mapper_index_from_abs_coords(ax, ay, gl_max_level_nr, current_depth);
+
+        //fprintf(stderr, "depth: %d/%d idx: %d\n", current_depth,gl_max_level_nr,index);
 
         /* Create children if needed */
         if(!_mapper_node_has_children(*node))
@@ -238,10 +307,14 @@ int _mapper_get_node(float x, float y, Node **node,
         }
 
         /* Get next node*/
-        if (( result == MAPPER_OK) && ((*node)->children[index] != NULL))
+        if ((result == MAPPER_OK) && ((*node)->children[index] != NULL))
         {
             *parent = *node;
             *node = (*node)->children[index];
+        }
+        else
+        {
+            break;
         }
     }
 
@@ -451,7 +524,7 @@ For more information see https://en.wikipedia.org/wiki/Z-order_curve
 int mapper_get_z_order(const int x, const int y, int * z)
 {
    int result = (int) MAPPER_OK;
-   int size  = pow(2, gl_max_level-1);
+   int size  = pow(2, gl_max_level_nr-1);
    int i  = 0;
 
    if (z == NULL)
@@ -487,7 +560,7 @@ For more information see https://en.wikipedia.org/wiki/Z-order_curve
 int mapper_get_xy_from_z_order(const int z, int * x, int * y)
 {
    int result = (int) MAPPER_OK;
-   int size  = pow(2, gl_max_level-1);
+   int size  = pow(2, gl_max_level_nr-1);
    int i  = 0;
 
    if ((x == NULL) || (y == NULL))
@@ -525,18 +598,15 @@ int mapper_print_map(bool with_depth)
     float y = 0;
     float x = 0;
 
-    float dx = gl_size[0] / pow(2, gl_max_level);
-    float dy = gl_size[1] / pow(2, gl_max_level);
-
     MaptileValueEnum value = MAPPER_FREE;
 
-    for(y=0; y<gl_size[1]; y+=dy)
+    for(y=0; y<gl_size[1]; y+=gl_dy)
     {
-        for(x=0; x<gl_size[0]; x+=dx)
+        for(x=0; x<gl_size[0]; x+=gl_dx)
         {
             result = _mapper_get_node(x, y, &node, false, &parent, &depth);
-            value = node->value;
-            fprintf(stderr, "%c%s", with_depth?depth+0x30:0x20, value==MAPPER_BLOCKED?"X":value==MAPPER_UNKNOWN?"?":".");
+            fprintf(stderr, "%c%s", with_depth?depth+0x30:0x20,
+                                    node->value==MAPPER_BLOCKED?"X":node->value==MAPPER_UNKNOWN?"?":".");
         }
         fprintf(stderr, "\n");
     }

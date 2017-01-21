@@ -10,6 +10,8 @@ OPTION(BUILD_PORTHOS_DOCUMENTATION "Create doxygen documentation for developers"
 
 include_directories(inc)
 
+set_property(GLOBAL PROPERTY C_STANDARD 99)
+
 enable_testing()
 
 add_subdirectory(lib)

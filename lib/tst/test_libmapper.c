@@ -19,6 +19,7 @@ Test initialization of Mapper library
 */
 START_TEST (test_init)
 {
+    /* Execute */
     CALL(mapper_init(1.0, 1.0, 3));
 }
 END_TEST
@@ -27,19 +28,13 @@ END_TEST
 */
 START_TEST (test_add_point)
 {
-    CALL(mapper_init(2.0, 2.0, 4));
+    /* Setup */
+    CALL(mapper_init(2.0, 2.0, 2));
 
+    /* Execute */
     CALL(mapper_add_point(1.8, 1.8, MAPPER_BLOCKED));
-    CALL(mapper_add_point(0.0, 0.0, MAPPER_BLOCKED));
-
-    CALL(mapper_add_point(1.2, 0.0, MAPPER_FREE));
-    CALL(mapper_add_point(1.2, 0.8, MAPPER_FREE));
-    CALL(mapper_add_point(1.8, 0.0, MAPPER_FREE));
-    CALL(mapper_add_point(1.8, 0.8, MAPPER_FREE));
 
     CALL(mapper_print_map(true));
-    fprintf(stderr, "\n");
-    CALL(mapper_print_map(false));
 }
 END_TEST
 
@@ -267,6 +262,53 @@ END_TEST
 
 /** @}*/
 
+
+/*----------------------------------------------------------------------------*/
+/** \internal
+ *  \addtogroup test_get_node
+ *  Testing _mapper_get_node functions
+ *  @{
+ */
+
+/** \brief NULL parameter results in MAPPER_PARAMETER_ERROR */
+void test_get_node_setup()
+{
+    CALL(mapper_init(1.0, 1.0, 3));
+    CALL(mapper_add_point(0.49, 0.49, MAPPER_BLOCKED));
+}
+
+void test_get_node_teardown()
+{
+    CALL(mapper_clear_map());
+}
+
+/** \brief */
+START_TEST (test_get_node_GW001)
+{
+    int result = MAPPER_OK;
+
+    float x = 0.0;
+    float y = 0.0;
+
+    Node * node = NULL;
+    Node * parent = NULL;
+    bool add_nodes = false;
+    int depth = 0;
+
+    /* Setup */
+    //CALL(mapper_add_point(0.3, 0.3, MAPPER_FREE));
+
+    /* Execute */
+    CALL(_mapper_get_node(x, y, &node, add_nodes, &parent, &depth));
+
+    /* Verify */
+    mapper_print_map(true);
+
+    ck_assert_int_eq(depth, 3);
+}
+END_TEST
+/** @}*/
+
 /*! \brief Test adding single point
 */
 START_TEST (test_get_point)
@@ -304,6 +346,8 @@ END_TEST
 
 
 /*! \brief Test getting z order
+
+A vector provides X,Y and expected Z-order
 */
 #define NR_GET_Z_ORDER_TESTS (4)
 static const int test_get_z_order_vectors[NR_GET_Z_ORDER_TESTS][3] = {{0,0,0},
@@ -345,6 +389,30 @@ START_TEST (test_get_xy_from_z_order)
 }
 END_TEST
 
+/*! \brief Test local index from abs coords
+*/
+#define NR_INDEX_FROM_ABS_COORDS_TESTS (7)
+static const unsigned int test_nr_index_from_abs_coords_vectors[NR_INDEX_FROM_ABS_COORDS_TESTS][5] \
+                                                                   = {{0,0,0,0,0},
+                                                                      {1,1,1,1,3},
+                                                                      {1,1,1,0,0},
+                                                                      {1,1,2,0,0},
+                                                                      {1,1,2,1,0},
+                                                                      {1,1,2,2,3},
+                                                                      {2,1,3,3,2}};
+
+START_TEST (test_index_from_abs_coords)
+{
+    unsigned int index = 0;
+    index = _mapper_index_from_abs_coords(test_nr_index_from_abs_coords_vectors[_i][0],
+                                          test_nr_index_from_abs_coords_vectors[_i][1],
+                                          test_nr_index_from_abs_coords_vectors[_i][2],
+                                          test_nr_index_from_abs_coords_vectors[_i][3]);
+
+    ck_assert_int_eq(index, test_nr_index_from_abs_coords_vectors[_i][4]);
+}
+END_TEST
+
 Suite* mapper (void) {
         Suite *suite = suite_create("range");
         TCase *tcase = tcase_create("GW");
@@ -355,7 +423,7 @@ Suite* mapper (void) {
         tcase_add_test(tcase, test_set_area);
         tcase_add_loop_test(tcase, test_get_z_order, 0, NR_GET_Z_ORDER_TESTS);
         tcase_add_loop_test(tcase, test_get_xy_from_z_order, 0, NR_GET_XY_FROM_Z_ORDER_TESTS);
-
+        tcase_add_loop_test(tcase, test_index_from_abs_coords, 0, NR_INDEX_FROM_ABS_COORDS_TESTS);
 
         /* Add children */
         TCase *add_children_tcase = tcase_create("add_children");
@@ -386,10 +454,18 @@ Suite* mapper (void) {
         tcase_add_test(flatten_node_tcase, test_flatten_node_GW003);
         tcase_add_test(flatten_node_tcase, test_flatten_node_BW001);
 
+        /* Get node */
+        TCase *get_node_tcase = tcase_create("get_node");
+        tcase_add_checked_fixture(get_node_tcase,
+                                  test_get_node_setup,
+                                  test_get_node_teardown);
+        tcase_add_test(get_node_tcase, test_get_node_GW001);
+
         suite_add_tcase(suite, tcase);
         suite_add_tcase(suite, add_children_tcase);
         suite_add_tcase(suite, remove_children_tcase);
         suite_add_tcase(suite, flatten_node_tcase);
+        suite_add_tcase(suite, get_node_tcase);
         return suite;
 }
 
@@ -397,6 +473,8 @@ int main (int argc, char *argv[]) {
         int number_failed;
         Suite *suite = mapper();
         SRunner *runner = srunner_create(suite);
+
+        srunner_set_fork_status(runner, CK_NOFORK);
 
         srunner_run_all(runner, CK_NORMAL);
         number_failed = srunner_ntests_failed(runner);

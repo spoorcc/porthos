@@ -1,3 +1,4 @@
+/** Mapper works with quadtree internally */
 typedef struct Node {
 
     struct Node *children[4];
@@ -16,3 +17,8 @@ extern int _mapper_flatten_node(Node * node);
 extern int _mapper_visit_graph(Node *node,
                          node_cb_func callback_func);
 extern bool _mapper_node_has_children(Node * node);
+
+extern inline unsigned int _mapper_index_from_abs_coords(unsigned int ax,
+                                                         unsigned int ay,
+                                                         unsigned int max_depth,
+                                                         unsigned int current_depth);
