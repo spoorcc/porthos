@@ -8,13 +8,11 @@ SET ( PORTHOS_SUBTITLE "An-embedded-linux-robot" )
 SET ( PORTHOS_VERSION "0.0.0-cmake" )
 OPTION(BUILD_PORTHOS_DOCUMENTATION "Create doxygen documentation for developers" ON)
 
-include_directories(src/range)
-include_directories(src/motion)
+include_directories(inc)
 
-add_subdirectory(src)
+set_property(GLOBAL PROPERTY C_STANDARD 99)
+
+enable_testing()
+
+add_subdirectory(lib)
 add_subdirectory(doc)
-add_subdirectory(tst)
-
-enable_testing ()
-add_test (NAME libmotion  COMMAND test_libmotion)
-add_test (NAME librange  COMMAND test_librange)

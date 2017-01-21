@@ -2,14 +2,14 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "range.h"
+#include "porthos/range.h"
 
 #define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
 #define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-6), msg);
 
 /*! \brief Test initialization
 
-Test initialization of Motion library
+Test initialization of Range library
 */
 START_TEST (test_init)
 {
@@ -79,7 +79,7 @@ START_TEST (test_schedule_and_retrieve_BW002)
 }
 END_TEST
 
-Suite* motion (void) {
+Suite* range (void) {
         Suite *suite = suite_create("range");
         TCase *tcase = tcase_create("GW");
 
@@ -95,7 +95,7 @@ Suite* motion (void) {
 
 int main (int argc, char *argv[]) {
         int number_failed;
-        Suite *suite = motion();
+        Suite *suite = range();
         SRunner *runner = srunner_create(suite);
 
         srunner_run_all(runner, CK_NORMAL);

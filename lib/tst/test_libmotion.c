@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "motion.h"
+#include "porthos/motion.h"
 
 #define CALL(x) ck_assert_msg((0 == (x)), "Should succeed");
 #define ck_assert_dbl_eq_msg(X, Y, msg) ck_assert_msg((fabs((X)-(Y)) < 1e-6), msg);

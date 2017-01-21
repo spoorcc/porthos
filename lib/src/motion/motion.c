@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "motion.h"
+#include "porthos/motion.h"
 
 /* Position tracked through motions in meters */
 static position_t gl_position = {0};
