@@ -32,6 +32,3 @@ extern int mapper_get_point(float x, float y, MaptileValueEnum * value);
 extern int mapper_set_area(float x1, float y1, float x2, float y2, MaptileValueEnum value);
 
 extern int mapper_print_map(bool with_depth);
-
-extern int mapper_get_z_order(const int x, const int y, int * z);
-extern int mapper_get_xy_from_z_order(const int z, int * x, int * y);

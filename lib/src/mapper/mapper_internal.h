@@ -18,6 +18,9 @@ extern int _mapper_visit_graph(Node *node,
                          node_cb_func callback_func);
 extern bool _mapper_node_has_children(Node * node);
 
+extern int _mapper_get_z_order(const int x, const int y, int * z);
+extern int _mapper_get_xy_from_z_order(const int z, int * x, int * y);
+
 extern inline unsigned int _mapper_index_from_abs_coords(unsigned int ax,
                                                          unsigned int ay,
                                                          unsigned int max_depth,

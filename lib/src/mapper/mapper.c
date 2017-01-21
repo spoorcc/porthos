@@ -169,11 +169,11 @@ static int _mapper_set_area_cb(Node ** node)
 
     if(!_mapper_node_has_children(*node) && (result == MAPPER_OK))
     {
-        result = mapper_get_xy_from_z_order((*node)->z_order_start, &nx1, &ny1);
+        result = _mapper_get_xy_from_z_order((*node)->z_order_start, &nx1, &ny1);
 
         if(result == MAPPER_OK)
         {
-            result = mapper_get_xy_from_z_order((*node)->z_order_end, &nx2, &ny2);
+            result = _mapper_get_xy_from_z_order((*node)->z_order_end, &nx2, &ny2);
         }
 
         if(result == MAPPER_OK)
@@ -516,7 +516,7 @@ For more information see https://en.wikipedia.org/wiki/Z-order_curve
 
 \pre level must be set using mapper_init
 */
-int mapper_get_z_order(const int x, const int y, int * z)
+int _mapper_get_z_order(const int x, const int y, int * z)
 {
    int result = (int) MAPPER_OK;
    int size  = pow(2, gl_max_level_nr-1);
@@ -552,7 +552,7 @@ For more information see https://en.wikipedia.org/wiki/Z-order_curve
 
 \pre level must be set using mapper_init
 */
-int mapper_get_xy_from_z_order(const int z, int * x, int * y)
+int _mapper_get_xy_from_z_order(const int z, int * x, int * y)
 {
    int result = (int) MAPPER_OK;
    int size  = pow(2, gl_max_level_nr-1);

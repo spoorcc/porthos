@@ -395,8 +395,8 @@ START_TEST (test_get_z_order)
     int z = 0;
     CALL(mapper_init(1.0, 1.0, 3));
 
-    CALL(mapper_get_z_order(test_get_z_order_vectors[_i][0],
-                            test_get_z_order_vectors[_i][1], &z));
+    CALL(_mapper_get_z_order(test_get_z_order_vectors[_i][0],
+                             test_get_z_order_vectors[_i][1], &z));
     ck_assert_int_eq(z, test_get_z_order_vectors[_i][2]);
 }
 END_TEST
@@ -418,7 +418,7 @@ START_TEST (test_get_xy_from_z_order)
     int y = 0;
     CALL(mapper_init(1.0, 1.0, 3));
 
-    CALL(mapper_get_xy_from_z_order(test_get_xy_from_z_order_vectors[_i][2], &x, &y));
+    CALL(_mapper_get_xy_from_z_order(test_get_xy_from_z_order_vectors[_i][2], &x, &y));
     ck_assert_int_eq(x, test_get_xy_from_z_order_vectors[_i][0]);
     ck_assert_int_eq(y, test_get_xy_from_z_order_vectors[_i][1]);
 }
