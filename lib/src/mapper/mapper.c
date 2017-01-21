@@ -81,7 +81,7 @@ int mapper_init(float x_size, float y_size, unsigned int max_level)
     /* Initialize root-node */
     gl_map.value = MAPPER_UNKNOWN;
     gl_map.z_order_start = 0;
-    gl_map.z_order_end = pow(2, gl_max_level_nr+1)-1;
+    gl_map.z_order_end = pow(2, gl_max_level_nr*2)-1;
 
     return (int) MAPPER_OK;
 }
@@ -176,7 +176,6 @@ static int _mapper_set_area_cb(Node ** node)
             result = mapper_get_xy_from_z_order((*node)->z_order_end, &nx2, &ny2);
         }
 
-        fprintf(stderr, "%d,%d --> %d,%d\n", nx1, ny1, nx2, ny2);
         if(result == MAPPER_OK)
         {
             /* Node completly within area */
@@ -220,7 +219,7 @@ int mapper_set_area(float x1, float y1, float x2, float y2, MaptileValueEnum val
 {
     int result = (int) MAPPER_OK;
 
-    int max_depth = pow(2, gl_max_level_nr+1);
+    int max_depth = pow(2, gl_max_level_nr);
 
     if((x1 >= x2) || (y1 >= y2))
     {
@@ -285,13 +284,9 @@ int _mapper_get_node(float x, float y, Node **node,
     int ax = x / gl_dx;
     int ay = y / gl_dy;
 
-    //fprintf(stderr, "Abs coords %d,%d\n", ax, ay);
-
-    for(current_depth=0; (current_depth < gl_max_level_nr) && (result == MAPPER_OK); ++current_depth)
+    for(current_depth=0; (current_depth <= gl_max_level_nr) && (result == MAPPER_OK); ++current_depth)
     {
-        index = _mapper_index_from_abs_coords(ax, ay, gl_max_level_nr, current_depth);
-
-        //fprintf(stderr, "depth: %d/%d idx: %d\n", current_depth,gl_max_level_nr,index);
+        index = _mapper_index_from_abs_coords(ax, ay, gl_max_level_nr, current_depth +1);
 
         /* Create children if needed */
         if(!_mapper_node_has_children(*node))

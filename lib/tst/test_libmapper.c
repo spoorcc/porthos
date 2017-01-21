@@ -89,7 +89,7 @@ START_TEST (test_add_children_GW002)
 
     for(i=0; i<4; ++i)
     {
-        ck_assert(node.children[i]->value == node.value);
+        ck_assert_int_eq(node.children[i]->value, node.value);
     }
 }
 END_TEST
@@ -103,8 +103,44 @@ START_TEST (test_add_children_GW003)
 
     for(i=0; i<4; ++i)
     {
-        ck_assert(node.children[i]->z_order_start == i);
-        ck_assert(node.children[i]->z_order_end == i);
+        ck_assert_int_eq(node.children[i]->z_order_start, i);
+        ck_assert_int_eq(node.children[i]->z_order_end, i);
+    }
+}
+END_TEST
+
+/** \brief Children must get proper z-order */
+START_TEST (test_add_children_GW004)
+{
+    int i = 0;
+
+    node.z_order_start = 0;
+    node.z_order_end = 15;
+
+    CALL(_mapper_add_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert_int_eq(node.children[i]->z_order_start, i*4);
+        ck_assert_int_eq(node.children[i]->z_order_end, (1+i)*4 - 1);
+    }
+}
+END_TEST
+
+/** \brief Children must get proper z-order */
+START_TEST (test_add_children_GW005)
+{
+    int i = 0;
+
+    node.z_order_start = 0;
+    node.z_order_end = 63;
+
+    CALL(_mapper_add_children(&node));
+
+    for(i=0; i<4; ++i)
+    {
+        ck_assert_int_eq(node.children[i]->z_order_start, i*16);
+        ck_assert_int_eq(node.children[i]->z_order_end, (1+i)*16 - 1);
     }
 }
 END_TEST
@@ -274,7 +310,7 @@ END_TEST
 void test_get_node_setup()
 {
     CALL(mapper_init(1.0, 1.0, 3));
-    CALL(mapper_add_point(0.49, 0.49, MAPPER_BLOCKED));
+    CALL(mapper_add_point(0.0, 0.0, MAPPER_BLOCKED));
 }
 
 void test_get_node_teardown()
@@ -296,7 +332,6 @@ START_TEST (test_get_node_GW001)
     int depth = 0;
 
     /* Setup */
-    //CALL(mapper_add_point(0.3, 0.3, MAPPER_FREE));
 
     /* Execute */
     CALL(_mapper_get_node(x, y, &node, add_nodes, &parent, &depth));
@@ -433,6 +468,8 @@ Suite* mapper (void) {
         tcase_add_test(add_children_tcase, test_add_children_GW001);
         tcase_add_test(add_children_tcase, test_add_children_GW002);
         tcase_add_test(add_children_tcase, test_add_children_GW003);
+        tcase_add_test(add_children_tcase, test_add_children_GW004);
+        tcase_add_test(add_children_tcase, test_add_children_GW005);
         tcase_add_test(add_children_tcase, test_add_children_BW001);
         tcase_add_test(add_children_tcase, test_add_children_BW002);
 
