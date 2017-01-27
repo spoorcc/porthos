@@ -13,7 +13,7 @@ addons:
       - cmake
       - doxygen
       - check
-      - subunit
+      - libsubunit-dev
   coverity_scan:
     project:
       name: "spoorcc/porthos"
