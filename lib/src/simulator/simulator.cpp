@@ -24,16 +24,15 @@ int simulator_init()
 {
      Simulator simulator;
 
-     std::vector<Position> square;
-
-     square.push_back(Position(0.0, 0.0));
-     square.push_back(Position(1.0, 0.0));
-     square.push_back(Position(1.0, 1.0));
-     square.push_back(Position(0.0, 1.0));
-
-     Polygon square_pol(square);
+     Square square_pol(1.0);
 
      simulator.add_polygon(square_pol);
+
+     return (int) SIMULATOR_OK;
+}
+
+int simulator_status()
+{
 
      return (int) SIMULATOR_OK;
 }

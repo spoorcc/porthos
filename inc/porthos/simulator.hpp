@@ -9,6 +9,7 @@ extern "C" {
     } SimulatorError;
 
     extern int simulator_init();
+    extern int simulator_status();
 
 #ifdef __cplusplus
 }

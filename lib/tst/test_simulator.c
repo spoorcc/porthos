@@ -21,7 +21,7 @@ START_TEST (test_init)
 END_TEST
 
 
-Suite* mapper (void) {
+Suite* simulator (void) {
         Suite *suite = suite_create("simulator");
         TCase *tcase = tcase_create("GW");
 
@@ -33,7 +33,7 @@ Suite* mapper (void) {
 
 int main (int argc, char *argv[]) {
         int number_failed;
-        Suite *suite = mapper();
+        Suite *suite = simulator();
         SRunner *runner = srunner_create(suite);
 
         srunner_set_fork_status(runner, CK_NOFORK);
