@@ -1,1 +1,1 @@
-add_library(simulator SHARED simulator.c)
+add_library(simulator SHARED simulator.cpp)
