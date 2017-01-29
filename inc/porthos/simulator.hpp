@@ -1,7 +1,15 @@
 #include <stdio.h>
 
-/*! error code for library */
-typedef enum {SIMULATOR_OK = 0,          /*!< Everything went OK */ \
-} SimulatorError;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern int simulator_init();
+    /*! error code for library */
+    typedef enum {SIMULATOR_OK = 0,          /*!< Everything went OK */ \
+    } SimulatorError;
+
+    extern int simulator_init();
+
+#ifdef __cplusplus
+}
+#endif
