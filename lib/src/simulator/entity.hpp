@@ -28,11 +28,7 @@ class Entity {
 
         template <typename T>
         T* component() {
-
-             T* comp_ptr = (T*) components[typeid(T).name()];
-
-             std::cout << typeid(T).name() << " : " << comp_ptr << std::endl;
-             return comp_ptr;
+             return (T*) components[typeid(T).name()];
         }
 };
 

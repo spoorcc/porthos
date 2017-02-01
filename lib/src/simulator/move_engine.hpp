@@ -18,11 +18,23 @@ class MoveEngine : public Engine {
 
         virtual void update(void) {
 
+             float speed;
+             Position pos;
+
              std::vector<pos_mov_pair_t>::iterator it;
              for(it = pos_mov_vect.begin();
                  it != pos_mov_vect.end();
                  ++it)
              {
+                 speed = (*it).second->get_speed();
+
+                 pos = (*it).first->get_position();
+
+                 pos.x += speed;
+                 pos.y += speed;
+
+                 std::cout << "x: " << pos.x << ", "\
+                           << "y: " << pos.y << std::endl;
              }
 
         }
@@ -37,8 +49,8 @@ class MoveEngine : public Engine {
             if (( pos_ptr != NULL ) &&
                 (mov_ptr != NULL))
             {
-                /* TODO : store pos,mov pair references */
-                std::cout << "Movement candidate : " << entity->ID << std::endl;
+                pos_mov_pair_t pm = std::make_pair(pos_ptr, mov_ptr);
+                pos_mov_vect.push_back(pm);
             }
         }
 
