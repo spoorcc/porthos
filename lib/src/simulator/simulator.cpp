@@ -32,22 +32,18 @@ int simulator_init()
 /* TODO: Create object factory */
 static Entity* simulator_create_entity(void)
 {
-     static unsigned long int object_id = 0;
+     Entity* entity = new Entity();
 
-     Entity* entity = new Entity(object_id++);
-     MoveComponent* move_comp = new MoveComponent;
-     PositionComponent* pos_comp = new PositionComponent;
-
-     entity->add_component(move_comp);
-     entity->add_component(pos_comp);
+     entity->add_component<MoveComponent>();
+     entity->add_component<PositionComponent>();
 
      return entity;
 }
 
 static int simulator_start()
 {
-     Entity * entity = simulator_create_entity();
-     simulator.add_entity(entity);
+     simulator.add_entity(simulator_create_entity());
+     simulator.add_entity(simulator_create_entity());
 
      return (int) SIMULATOR_OK;
 }

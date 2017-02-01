@@ -4,6 +4,7 @@
 #include <functional>
 #include <algorithm>
 #include <vector>
+#include <memory>
 #include <sstream>
 #include <string>
 
@@ -34,7 +35,7 @@ class Simulator {
                  it != engines.end();
                  ++it)
              {
-                 (*it)->entity_added(*entity);
+                 (*it)->entity_added(entity);
              }
         }
 

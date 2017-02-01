@@ -1,34 +1,39 @@
 #ifndef ENTITY_CLASS_HPP
 #define ENTITY_CLASS_HPP
 
-#include <vector>
+#include <map>
 #include <typeinfo>
 #include "simulator/component.hpp"
 
 class Entity {
 
-    unsigned long int ID;
-    std::vector<Component *> components;
+    typedef std::map<const std::string, Component *> component_map_t;
+    typedef std::pair<const std::string, Component *> component_pair_t;
+
+    component_map_t components;
 
     public:
-        Entity(unsigned long int ID){this->ID = ID;}
+        Entity(){
+            static unsigned long int ID = 0;
+            this->ID = ID++;
+        }
         ~Entity(void){}
 
-        void add_component(Component *component) {
-             this->components.push_back(component);
-        }
-        bool has_component(const std::type_info& component_type ) {
+        unsigned long int ID;
 
-             for( std::vector<Component*>::iterator it = components.begin();
-                  it != components.end();
-                  ++it)
-             {
-                  if ((*it)->is_of_type(component_type))
-                      return true;
-             }
-             return false;
+        template <typename T>
+        void add_component() {
+             components[typeid(T).name()] = new T;
         }
 
+        template <typename T>
+        T* component() {
+
+             T* comp_ptr = (T*) components[typeid(T).name()];
+
+             std::cout << typeid(T).name() << " : " << comp_ptr << std::endl;
+             return comp_ptr;
+        }
 };
 
 #endif /* ENTITY_CLASS_HPP */

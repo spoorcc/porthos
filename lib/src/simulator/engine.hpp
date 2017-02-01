@@ -13,7 +13,7 @@ class Engine {
 
         virtual operator std::string() const = 0;
 
-        virtual void entity_added(Entity& entity) = 0;
+        virtual void entity_added(Entity* entity) = 0;
 };
 
 #endif /* ENGINE_CLASS_HPP */
