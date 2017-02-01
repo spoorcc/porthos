@@ -49,6 +49,16 @@ class Simulator {
             return output.str();
         };
 
+       void update()
+       {
+             for(std::vector<Engine*>::iterator it = engines.begin();
+                 it != engines.end();
+                 ++it)
+             {
+                 (*it)->update();
+             }
+       }
+
     private:
 
        void add_engine(Engine * engine)

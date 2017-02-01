@@ -6,9 +6,7 @@
 #include <iostream>
 
 #include "simulator/simulator.hpp"
-#include "simulator/entity.hpp"
-#include "simulator/move_component.hpp"
-#include "simulator/position_component.hpp"
+#include "simulator/factory.hpp"
 
 static int simulator_start();
 
@@ -25,25 +23,15 @@ int simulator_init()
     result = simulator_start();
 
     simulator_status();
+    simulator.update();
 
     return (int) result;
 }
 
-/* TODO: Create object factory */
-static Entity* simulator_create_entity(void)
-{
-     Entity* entity = new Entity();
-
-     entity->add_component<MoveComponent>();
-     entity->add_component<PositionComponent>();
-
-     return entity;
-}
-
 static int simulator_start()
 {
-     simulator.add_entity(simulator_create_entity());
-     simulator.add_entity(simulator_create_entity());
+     simulator.add_entity(factory_create_entity());
+     simulator.add_entity(factory_create_entity());
 
      return (int) SIMULATOR_OK;
 }
