@@ -11,6 +11,7 @@
 #include "simulator/entity.hpp"
 #include "simulator/engine.hpp"
 #include "simulator/move_engine.hpp"
+#include "simulator/render_engine.hpp"
 
 class Simulator {
 
@@ -20,6 +21,7 @@ class Simulator {
     public:
         Simulator(void){
             add_engine(new MoveEngine);
+            add_engine(new RenderEngine);
         }
         ~Simulator(void){
 

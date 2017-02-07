@@ -17,6 +17,7 @@ START_TEST (test_init)
 {
     /* Execute */
     CALL(simulator_init());
+    CALL(simulator_run(4));
 }
 END_TEST
 

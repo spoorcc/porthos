@@ -32,11 +32,7 @@ class MoveEngine : public Engine {
 
                  pos.x += speed;
                  pos.y += speed;
-
-                 std::cout << "x: " << pos.x << ", "\
-                           << "y: " << pos.y << std::endl;
              }
-
         }
 
         virtual operator std::string() const {}

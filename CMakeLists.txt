@@ -14,5 +14,6 @@ set_property(GLOBAL PROPERTY C_STANDARD 99)
 
 enable_testing()
 
+add_subdirectory(deps)
 add_subdirectory(lib)
 add_subdirectory(doc)

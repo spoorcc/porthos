@@ -5,6 +5,7 @@
 #include "simulator/entity.hpp"
 #include "simulator/move_component.hpp"
 #include "simulator/position_component.hpp"
+#include "simulator/render_component.hpp"
 
 static Entity* factory_create_entity(void)
 {
@@ -12,6 +13,7 @@ static Entity* factory_create_entity(void)
 
      entity->add_component<MoveComponent>();
      entity->add_component<PositionComponent>();
+     entity->add_component<RenderComponent>();
 
      return entity;
 }

@@ -8,7 +8,8 @@ FIND_PATH(CHECK_INCLUDE_DIR NAMES check.h)
 # Look for the library.
 FIND_LIBRARY(CHECK_LIBRARY NAMES check)
 
-SET(CHECK_DEPENDENCIES m rt pthread subunit)
+#SET(CHECK_DEPENDENCIES m rt pthread subunit)
+SET(CHECK_DEPENDENCIES m rt pthread )
 
 IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.4)
   # handle the QUIETLY and REQUIRED arguments and set CHECK_FOUND to TRUE if
