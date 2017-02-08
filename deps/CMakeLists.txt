@@ -1,3 +1,6 @@
+
+
+IF (BUILD_PORTHOS_SIM_GUI)
 # GLFW
 # Don't build any docs/tests/examples
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -12,3 +15,5 @@ add_definitions(-fPIC)
 add_subdirectory(glad)
 set(GLAD_INCLUDE_DIRS ${GLAD_INCLUDE_DIRS} PARENT_SCOPE)
 set(GLAD_LIBRARIES ${GLAD_LIBRARIES} PARENT_SCOPE)
+
+ENDIF (BUILD_PORTHOS_SIM_GUI)

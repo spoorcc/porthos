@@ -7,6 +7,7 @@ SET ( PORTHOS_TITLE "Porthos" )
 SET ( PORTHOS_SUBTITLE "An-embedded-linux-robot" )
 SET ( PORTHOS_VERSION "0.0.0-cmake" )
 OPTION(BUILD_PORTHOS_DOCUMENTATION "Create doxygen documentation for developers" ON)
+OPTION(BUILD_PORTHOS_SIM_GUI "Generate GUI for simulation" OFF)
 
 include_directories(inc)
 

@@ -11,7 +11,10 @@
 #include "simulator/entity.hpp"
 #include "simulator/engine.hpp"
 #include "simulator/move_engine.hpp"
+
+#ifdef PORTHOS_WITH_GUI
 #include "simulator/render_engine.hpp"
+#endif /* PORTHOS_WITH_GUI */ 
 
 class Simulator {
 
@@ -21,7 +24,10 @@ class Simulator {
     public:
         Simulator(void){
             add_engine(new MoveEngine);
+
+            #ifdef PORTHOS_WITH_GUI
             add_engine(new RenderEngine);
+            #endif /* PORTHOS_WITH_GUI */
         }
         ~Simulator(void){
 
