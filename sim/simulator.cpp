@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 
+#define UPDATES_PER_SECOND (10)
+
 #include "simulator.hpp"
 #include "factory.hpp"
 
@@ -38,7 +40,6 @@ static int simulator_start()
      return (int) SIMULATOR_OK;
 }
 
-#define UPDATES_PER_SECOND (10)
 int simulator_run(unsigned long int seconds_to_run)
 {
   std::cout << "Starting simulation\n";
