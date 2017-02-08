@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "entity.hpp"
+
 class Engine {
 
     public:

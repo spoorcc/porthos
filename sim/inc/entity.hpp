@@ -3,6 +3,7 @@
 
 #include <map>
 #include <typeinfo>
+
 #include "component.hpp"
 
 class Entity {
