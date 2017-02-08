@@ -3,7 +3,7 @@
 #ifndef MOVE_COMPONENT_H
 #define MOVE_COMPONENT_H
 
-#include "simulator/component.hpp"
+#include "component.hpp"
 
 class MoveComponent : public Component {
 

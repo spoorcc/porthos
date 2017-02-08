@@ -1,7 +1,7 @@
 #ifndef POSITION_COMPONENT_H
 #define POSITION_COMPONENT_H
 
-#include "simulator/component.hpp"
+#include "component.hpp"
 
 struct Position {
     float x;

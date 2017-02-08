@@ -2,12 +2,12 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 
-#include "simulator/entity.hpp"
-#include "simulator/move_component.hpp"
-#include "simulator/position_component.hpp"
+#include "entity.hpp"
+#include "move_component.hpp"
+#include "position_component.hpp"
 
 #ifdef PORTHOS_WITH_GUI
-#include "simulator/render_component.hpp"
+#include "render_component.hpp"
 #endif /* PORTHOS_WITH_GUI */
 
 static Entity* factory_create_entity(void)

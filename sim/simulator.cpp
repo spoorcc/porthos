@@ -7,8 +7,8 @@
 #include <thread>
 #include <chrono>
 
-#include "simulator/simulator.hpp"
-#include "simulator/factory.hpp"
+#include "simulator.hpp"
+#include "factory.hpp"
 
 static int simulator_start();
 

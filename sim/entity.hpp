@@ -3,7 +3,7 @@
 
 #include <map>
 #include <typeinfo>
-#include "simulator/component.hpp"
+#include "component.hpp"
 
 class Entity {
 

@@ -13,4 +13,12 @@ IF( PORTHOS_BUILD_SIM_GUI)
     target_include_directories(simulator PRIVATE ${glfw_INCLUDE_DIRS} ${GLAD_INCLUDE_DIRS})
     target_link_libraries(simulator glfw glad  ${OPENGL_gl_LIBRARY})
 
+    add_executable(test_gl test_gl.c)
+    target_link_libraries(test_gl glfw glad  ${OPENGL_gl_LIBRARY})
 ENDIF( PORTHOS_BUILD_SIM_GUI)
+
+find_package(Check REQUIRED)
+add_executable(test_simulator test_simulator.c)
+target_link_libraries(test_simulator simulator ${CHECK_LIBRARIES})
+
+add_test (NAME simulator COMMAND test_simulator)

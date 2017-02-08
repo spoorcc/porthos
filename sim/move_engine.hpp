@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <utility>
 #include <string>
-#include "simulator/move_component.hpp"
-#include "simulator/position_component.hpp"
+#include "move_component.hpp"
+#include "position_component.hpp"
 
 class MoveEngine : public Engine {
 

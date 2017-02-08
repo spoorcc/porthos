@@ -1,7 +1,7 @@
 #ifndef RENDER_COMPONENT_H
 #define RENDER_COMPONENT_H
 
-#include "simulator/component.hpp"
+#include "component.hpp"
 
 class RenderComponent : public Component {
 

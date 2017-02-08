@@ -8,12 +8,12 @@
 #include <sstream>
 #include <string>
 
-#include "simulator/entity.hpp"
-#include "simulator/engine.hpp"
-#include "simulator/move_engine.hpp"
+#include "entity.hpp"
+#include "engine.hpp"
+#include "move_engine.hpp"
 
 #ifdef PORTHOS_WITH_GUI
-#include "simulator/render_engine.hpp"
+#include "render_engine.hpp"
 #endif /* PORTHOS_WITH_GUI */ 
 
 class Simulator {
