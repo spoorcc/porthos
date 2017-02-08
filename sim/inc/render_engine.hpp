@@ -30,6 +30,8 @@ class RenderEngine : public Engine {
    private:
         void setup(); 
         void display();
+        void setup_window();
+        void compile_shaders();
 };
 
 

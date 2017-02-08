@@ -7,7 +7,7 @@
 #include <thread>
 #include <chrono>
 
-#define UPDATES_PER_SECOND (10)
+#define UPDATES_PER_SECOND (100)
 
 #include "simulator.hpp"
 #include "factory.hpp"
