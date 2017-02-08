@@ -7,13 +7,13 @@
 
 #include "engine.hpp"
 #include "entity.hpp"
-#include "move_component.hpp"
 #include "position_component.hpp"
+#include "rigid_body_component.hpp"
 
 class CollisionEngine : public Engine {
 
-    typedef std::pair<PositionComponent*, CollisionComponent*> pos_col_pair_t;
-    std::vector< pos_col_pair_t > pos_col_vect;
+    typedef std::pair<PositionComponent*, RigidBodyComponent*> pos_bod_pair_t;
+    std::vector< pos_bod_pair_t > pos_bod_vect;
 
     public:
         CollisionEngine(void);

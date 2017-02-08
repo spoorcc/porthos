@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <utility>
 #include <string>
+#include <vector>
 
 #include "engine.hpp"
 #include "entity.hpp"

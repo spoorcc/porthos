@@ -11,6 +11,7 @@
 #include "entity.hpp"
 #include "engine.hpp"
 #include "move_engine.hpp"
+#include "collision_engine.hpp"
 
 #ifdef PORTHOS_WITH_GUI
 #include "render_engine.hpp"
@@ -24,6 +25,7 @@ class Simulator {
     public:
         Simulator(void){
             add_engine(new MoveEngine);
+            add_engine(new CollisionEngine);
 
             #ifdef PORTHOS_WITH_GUI
             add_engine(new RenderEngine);
