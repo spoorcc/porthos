@@ -6,6 +6,7 @@ $ cat .gitignore
 
 #--------------
 # Generic
+tags
 
 # Tempory files
 *~
