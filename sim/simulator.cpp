@@ -34,8 +34,8 @@ int simulator_init()
 
 static int simulator_start()
 {
-     simulator.add_entity(factory_create_entity());
-     simulator.add_entity(factory_create_entity());
+     simulator.add_entity(factory_create_wall(xy_vec_t(0.0, 0.0),
+                                              xy_vec_t(1.0, 1.0)));
 
      return (int) SIMULATOR_OK;
 }

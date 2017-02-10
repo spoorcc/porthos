@@ -21,7 +21,7 @@ void CollisionEngine::update(void) {
             it != pos_bod_vect.end();
             ++it)
     {
-          std::cout << "calculate collision\n";
+           /* calculate collision */
     }
 }
 

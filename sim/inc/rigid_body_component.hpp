@@ -8,13 +8,13 @@
 
 class RigidBodyComponent : public Component {
 
-    std::vector<xy_pos_t> outline;
+    std::vector<xy_vec_t> outline;
 
     public:
         RigidBodyComponent() : outline(){}
         ~RigidBodyComponent(void){}
 
-        std::vector<xy_pos_t> & get_outline(void){return this->outline;}
+        std::vector<xy_vec_t> & get_outline(void){return this->outline;}
 };
 
 #endif /* RIGID_BODY_COMPONENT_H */
