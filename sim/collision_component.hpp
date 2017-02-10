@@ -6,14 +6,13 @@
 
 class CollisionComponent : public Component {
 
-    std::vector<
+    std::vector< xy_pos_t > bounding_box;
 
     public:
         CollisionComponent() : speed(0.0){}
         ~CollisionComponent(void){}
 
-        float& get_speed(void){return this->speed;}
-        void set_speed(const float& speed){this->speed = speed;}
+        std::vector<xyz_pos_t>& get_boundingbox(void){return this->bounding_box;}
 };
 
 #endif /* COLLISION_COMPONENT_H */

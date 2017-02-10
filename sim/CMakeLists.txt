@@ -10,7 +10,8 @@ ENDIF( PORTHOS_BUILD_SIM_GUI)
 
 add_library(simulator SHARED simulator.cpp)
 add_library(move_engine SHARED src/move_engine.cpp)
-target_link_libraries(simulator move_engine)
+add_library(collision_engine SHARED src/collision_engine.cpp)
+target_link_libraries(simulator move_engine collision_engine)
 
 IF( PORTHOS_BUILD_SIM_GUI)
     add_library(render_engine SHARED render_engine.cpp)
