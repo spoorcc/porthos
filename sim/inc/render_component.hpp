@@ -1,5 +1,5 @@
-#ifndef RENDER_COMPONENT_H
-#define RENDER_COMPONENT_H
+#ifndef RENDER_COMPONENT_HPP
+#define RENDER_COMPONENT_HPP
 
 #include "component.hpp"
 
@@ -10,4 +10,4 @@ class RenderComponent : public Component {
         ~RenderComponent(void){}
 };
 
-#endif /* RENDER_COMPONENT_H */
+#endif /* RENDER_COMPONENT_HPP */
