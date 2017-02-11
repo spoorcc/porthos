@@ -12,6 +12,7 @@
 #include "engine.hpp"
 #include "move_engine.hpp"
 #include "collision_engine.hpp"
+#include "ray_trace_engine.hpp"
 
 #ifdef PORTHOS_WITH_GUI
 #include "render_engine.hpp"
@@ -26,6 +27,7 @@ class Simulator {
         Simulator(void){
             add_engine(new MoveEngine);
             add_engine(new CollisionEngine);
+            add_engine(new RayTraceEngine);
 
             #ifdef PORTHOS_WITH_GUI
             add_engine(new RenderEngine);
