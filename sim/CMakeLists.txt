@@ -23,6 +23,10 @@ IF( BUILD_PORTHOS_SIM_GUI)
 
     add_executable(test_gl tst/test_gl.c)
     target_link_libraries(test_gl glfw glad  ${OPENGL_gl_LIBRARY})
+
+    configure_file(inc/fragment_shader.glsl fragment_shader.glsl COPYONLY)
+    configure_file(inc/vertex_shader.glsl vertex_shader.glsl COPYONLY)
+
 ENDIF( BUILD_PORTHOS_SIM_GUI)
 
 find_package(Check REQUIRED)
