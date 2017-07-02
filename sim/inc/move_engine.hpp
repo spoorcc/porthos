@@ -5,6 +5,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "engine.hpp"
 #include "entity.hpp"
@@ -24,7 +25,7 @@ class MoveEngine : public Engine {
 
         virtual operator std::string() const;
 
-        virtual void entity_added(Entity* entity);
+        virtual void entity_added(std::shared_ptr<Entity> entity);
 };
 
 #endif /* MOVE_ENGINE_CLASS_HPP */

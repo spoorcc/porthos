@@ -7,6 +7,8 @@
 
 #include "move_engine.hpp"
 
+using namespace std;
+
 MoveEngine::MoveEngine(void){}
 
 MoveEngine::~MoveEngine(void){}
@@ -32,7 +34,7 @@ void MoveEngine::update(void) {
 
 MoveEngine::operator std::string() const {}
 
-void MoveEngine::entity_added(Entity* entity) {
+void MoveEngine::entity_added(shared_ptr<Entity> entity) {
 
     PositionComponent* pos_ptr = entity->component<PositionComponent>();
     MoveComponent* mov_ptr = entity->component<MoveComponent>();

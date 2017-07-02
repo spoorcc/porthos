@@ -1,6 +1,6 @@
 // Vertex Shade - file "minimal.vert"
 
-#version 140
+#version 300 es
 
 in  vec3 in_Position;
 in  vec3 in_Color;

@@ -1,10 +1,13 @@
 #include <algorithm>
 #include <utility>
 #include <string>
+#include <memory>
 
 #include "rigid_body_component.hpp"
 
 #include "ray_trace_engine.hpp"
+
+using namespace std;
 
 RayTraceEngine::RayTraceEngine(void){}
 
@@ -16,7 +19,7 @@ void RayTraceEngine::update(void) {
 
 RayTraceEngine::operator std::string() const {}
 
-void RayTraceEngine::entity_added(Entity* entity) {
+void RayTraceEngine::entity_added(shared_ptr<Entity> entity) {
 
     RigidBodyComponent* bod_ptr = entity->component<RigidBodyComponent>();
 

@@ -2,11 +2,14 @@
 #include <utility>
 #include <string>
 #include <iostream>
+#include <memory>
 
 #include "rigid_body_component.hpp"
 #include "position_component.hpp"
 
 #include "collision_engine.hpp"
+
+using namespace std;
 
 CollisionEngine::CollisionEngine(void){}
 
@@ -27,7 +30,7 @@ void CollisionEngine::update(void) {
 
 CollisionEngine::operator std::string() const {}
 
-void CollisionEngine::entity_added(Entity* entity) {
+void CollisionEngine::entity_added(shared_ptr<Entity> entity) {
 
     PositionComponent* pos_ptr = entity->component<PositionComponent>();
     RigidBodyComponent* bod_ptr = entity->component<RigidBodyComponent>();

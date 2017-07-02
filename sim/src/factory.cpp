@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "datatypes.hpp"
 #include "entity.hpp"
 #include "move_component.hpp"
@@ -10,10 +12,12 @@
 #include "render_component.hpp"
 #endif /* PORTHOS_WITH_GUI */
 
-Entity* factory_create_wall( const xy_vec_t  pos,
+using namespace std;
+
+shared_ptr<Entity> factory_create_wall( const xy_vec_t  pos,
                              const xy_vec_t size )
 {
-     Entity* entity = new Entity();
+     auto entity = make_shared<Entity>();
 
      entity->add_component<PositionComponent>();
      entity->add_component<RigidBodyComponent>();
@@ -25,9 +29,9 @@ Entity* factory_create_wall( const xy_vec_t  pos,
      return entity;
 }
 
-Entity* factory_create_robot(void)
+shared_ptr<Entity> factory_create_robot(void)
 {
-     Entity* entity = new Entity();
+     auto entity = make_shared<Entity>();
 
      entity->add_component<MoveComponent>();
      entity->add_component<PositionComponent>();

@@ -5,6 +5,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "engine.hpp"
 #include "entity.hpp"
@@ -23,7 +24,7 @@ class RayTraceEngine : public Engine {
 
         virtual operator std::string() const;
 
-        virtual void entity_added(Entity* entity);
+        virtual void entity_added(std::shared_ptr<Entity> entity);
 };
 
 #endif /* RAY_TRACE_ENGINE_CLASS_HPP */

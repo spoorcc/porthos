@@ -1,6 +1,6 @@
 // Fragment Shader – file "minimal.frag"
 
-#version 140
+#version 300 es
 
 precision highp float; // needed only for version 1.30
 

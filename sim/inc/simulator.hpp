@@ -21,7 +21,7 @@
 class Simulator {
 
     std::vector<std::unique_ptr<Engine> > engines;
-    std::vector<Entity *> entities;
+    std::vector<std::shared_ptr<Entity> > entities;
 
     public:
         Simulator(void){
@@ -36,7 +36,7 @@ class Simulator {
         ~Simulator(void){
         }
 
-        void add_entity(Entity * entity) {
+        void add_entity(std::shared_ptr<Entity> entity) {
              entities.push_back(entity);
 
              for( auto& engine: engines)

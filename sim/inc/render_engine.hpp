@@ -1,8 +1,10 @@
 #ifndef RENDER_ENGINE_CLASS_HPP
 #define RENDER_ENGINE_CLASS_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -37,7 +39,7 @@ class RenderEngine : public Engine {
 
         virtual void update(void);
         virtual operator std::string() const;
-        virtual void entity_added(Entity* entity);
+        virtual void entity_added(std::shared_ptr<Entity> entity);
 
    private:
         void resize(unsigned int width, unsigned int height); 
