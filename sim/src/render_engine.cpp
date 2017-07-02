@@ -201,7 +201,8 @@ GLuint RenderEngine::create_shader(std::string path, GLenum shaderType)
 {
     GLuint shader = glCreateShader(shaderType);
     std::string shader_str = load_shader(path);
-    glShaderSource(shader, 1, shader_str.c_str(), NULL);
+    const char* shader_c_str = shader_str.c_str();
+    glShaderSource(shader, 1, &shader_c_str, NULL);
     glCompileShader(shader);
     shaders.push_back(shader);
 
