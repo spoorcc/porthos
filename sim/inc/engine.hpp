@@ -3,13 +3,13 @@
 
 #include <string>
 
-#include "entity.hpp"
+class Entity;
 
 class Engine {
 
     public:
         Engine(void){}
-        ~Engine(void){}
+        virtual ~Engine(void){}
 
         virtual void update(void) = 0;
 

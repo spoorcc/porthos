@@ -20,34 +20,28 @@
 
 class Simulator {
 
-    std::vector<Engine *> engines;
+    std::vector<std::unique_ptr<Engine> > engines;
     std::vector<Entity *> entities;
 
     public:
         Simulator(void){
-            add_engine(new MoveEngine);
-            add_engine(new CollisionEngine);
-            add_engine(new RayTraceEngine);
+            add_engine(std::unique_ptr<Engine>{ std::make_unique<MoveEngine>() } );
+            add_engine(std::unique_ptr<Engine>{ std::make_unique<CollisionEngine>() } );
+            add_engine(std::unique_ptr<Engine>{ std::make_unique<RayTraceEngine>() } );
 
             #ifdef PORTHOS_WITH_GUI
-            add_engine(new RenderEngine);
+            add_engine(std::unique_ptr<Engine>{ std::make_unique<RenderEngine>() } );
             #endif /* PORTHOS_WITH_GUI */
         }
         ~Simulator(void){
-
-            std::for_each(engines.begin(),
-                          engines.end(),
-                          std::default_delete<Engine>());
         }
 
         void add_entity(Entity * entity) {
              entities.push_back(entity);
 
-             for(std::vector<Engine*>::iterator it = engines.begin();
-                 it != engines.end();
-                 ++it)
+             for( auto& engine: engines)
              {
-                 (*it)->entity_added(entity);
+                 engine->entity_added(entity);
              }
         }
 
@@ -63,19 +57,17 @@ class Simulator {
 
        void update()
        {
-             for(std::vector<Engine*>::iterator it = engines.begin();
-                 it != engines.end();
-                 ++it)
+             for( auto& engine: engines)
              {
-                 (*it)->update();
+                 engine->update();
              }
        }
 
     private:
 
-       void add_engine(Engine * engine)
+       void add_engine(std::unique_ptr<Engine> engine)
        {
-             this->engines.push_back(engine);
+             engines.push_back(std::move(engine));
        }
 
 
