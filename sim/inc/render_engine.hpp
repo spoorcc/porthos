@@ -27,6 +27,13 @@ struct draw_array_t {
     GLsizei count = 3;
 };
 
+struct draw_elements_t {
+    GLenum mode = GL_TRIANGLES;
+    GLsizei count = 3;
+    GLenum type = GL_UNSIGNED_INT;
+    GLvoid * indices = 0;
+};
+
 class RenderObject {
 
     public:
@@ -36,6 +43,7 @@ class RenderObject {
     GLuint vao = 0;
     std::vector<GLuint> vbos;
     draw_array_t draw_array;
+    draw_elements_t draw_elements;
 };
 
 class RenderEngine : public Engine {
@@ -66,8 +74,11 @@ class RenderEngine : public Engine {
         void prepare_scene();
 
         void create_vertex_buffer();
-        void create_render_object(const std::vector<vec3f>& vertices, const std::vector<vec3f>& colors);
-        void create_render_object(const std::vector<vec3f>& vertices, vec3f color);
+        void create_render_object(const std::vector<vec3f>& vertices,
+                                  const std::vector<vec3f>& colors,
+                                  const std::vector<unsigned int>& elements);
+        void create_render_object(const std::vector<vec3f>& vertices, vec3f color,
+                                  const std::vector<unsigned int>& elements);
 
         std::string load_shader(std::string path);
         GLuint create_shader(std::string path,
