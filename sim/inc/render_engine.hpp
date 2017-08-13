@@ -14,23 +14,40 @@
 #define RENDER_ENGINE_WINDOW_HEIGHT (480)
 #define RENDER_ENGINE_WINDOW_TITLE ("Porthos - Simulation")
 
+struct vec3f { float x,y,z; };
+
 struct xy_rgb_t {
     float x, y;
     float r, g, b;
 };
 
+struct draw_array_t {
+    GLenum mode = GL_TRIANGLES;
+    GLint first = 0;
+    GLsizei count = 3;
+};
+
+class RenderObject {
+
+    public:
+        RenderObject(void) = default;
+        ~RenderObject(void) = default;
+
+    GLuint vao = 0;
+    std::vector<GLuint> vbos;
+    draw_array_t draw_array;
+};
+
 class RenderEngine : public Engine {
 
     std::vector< RenderComponent * > components;
-    std::vector< GLuint > vertex_buffers;
-    std::vector< GLuint > vaos;
+    std::vector< RenderObject > render_objects;
     std::vector< GLuint > vbos;
     std::vector< GLuint > shaders;
     GLuint program;
     GLint mvp_location;
     GLFWwindow* window;
 
-    GLuint m_vaoID[2];            // two vertex array objects, one for each drawn object
     GLuint m_vboID[3];            // three VBOs
 
     public:
@@ -49,6 +66,8 @@ class RenderEngine : public Engine {
         void prepare_scene();
 
         void create_vertex_buffer();
+        void create_render_object(const std::vector<vec3f>& vertices, const std::vector<vec3f>& colors);
+        void create_render_object(const std::vector<vec3f>& vertices, vec3f color);
 
         std::string load_shader(std::string path);
         GLuint create_shader(std::string path,
