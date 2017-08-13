@@ -184,21 +184,61 @@ void RenderEngine::create_render_object(const std::vector<vec3f>& vertices, vec3
     render_objects.push_back( obj );
 }
 
+void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
+                                        const std::vector<unsigned int>& elements)
+{
+    // Create VAO
+    RenderObject obj;
+    unsigned int count = vertices.size() * 3;
+
+    glGenVertexArrays(1, &obj.vao);
+    glBindVertexArray(obj.vao); //Make it the actual one
+
+    obj.vbos.resize(2, 0);
+    glGenBuffers(2, &(obj.vbos[0]));
+
+    glBindBuffer(GL_ARRAY_BUFFER, obj.vbos[0]);
+    glBufferData(GL_ARRAY_BUFFER, count*sizeof(GLfloat), (float*)&vertices[0], GL_STATIC_DRAW);
+
+    GLint posAttrib = glGetAttribLocation(program, "in_Position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), 0);
+
+    GLint colAttrib = glGetAttribLocation(program, "in_Color");
+    glEnableVertexAttribArray(colAttrib);
+    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
+                           6*sizeof(float), (void*)(3*sizeof(float)));
+
+    copy_elements_to_vbo(elements, obj.vbos[1]);
+
+    // Release Vertex Array
+    glBindVertexArray(0);
+    assert(glGetError() == GL_NO_ERROR);
+
+    render_objects.push_back( obj );
+}
 void RenderEngine::create_vertex_buffer()
 {
     // First simple object
-    std::vector<vec3f> vertices;
-    vertices.push_back({ 0.0,  0.6, -1.0});
-    vertices.push_back({ 0.6, -0.4, -1.0});
-    vertices.push_back({-0.6, -0.4, -1.0});
+    //std::vector<vec3f> vertices;
+    //vertices.push_back({ 0.0,  0.6, -1.0});
+    //vertices.push_back({ 0.6, -0.4, -1.0});
+    //vertices.push_back({-0.6, -0.4, -1.0});
 
-    std::vector<vec3f> colors;
-    colors.push_back({ 1.0, 0.0, 0.0});
-    colors.push_back({ 0.0, 1.0, 0.0});
-    colors.push_back({ 0.0, 0.0, 1.0});
+    //std::vector<vec3f> colors;
+    //colors.push_back({ 1.0, 0.0, 0.0});
+    //colors.push_back({ 0.0, 1.0, 0.0});
+    //colors.push_back({ 0.0, 0.0, 1.0});
+
+    std::vector<xyz_rgb_t> vertices;
+    //                   R     G     B    X    Y    Z
+    vertices.push_back({ 0.0,  0.6, -1.0, 1.0, 0.0, 0.0});
+    vertices.push_back({ 0.6, -0.4, -1.0, 0.0, 1.0, 0.0});
+    vertices.push_back({-0.6, -0.4, -1.0, 0.0, 0.0, 1.0});
 
     std::vector<unsigned int> elements {0, 1, 2};
-    create_render_object(vertices, colors, elements);
+    create_render_object(vertices, elements);
+    //create_render_object(vertices, colors, elements);
 
     // Second simple object
     vertices.clear();
@@ -208,7 +248,7 @@ void RenderEngine::create_vertex_buffer()
 
     vec3f col2 {1.0, 0.5, 0.0};
 
-    create_render_object(vertices, col2, {0, 1, 2});
+    //create_render_object(vertices, col2, {0, 1, 2});
 }
 
 

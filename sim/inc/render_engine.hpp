@@ -16,8 +16,8 @@
 
 struct vec3f { float x,y,z; };
 
-struct xy_rgb_t {
-    float x, y;
+struct xyz_rgb_t {
+    float x, y, z;
     float r, g, b;
 };
 
@@ -78,6 +78,8 @@ class RenderEngine : public Engine {
                                   const std::vector<vec3f>& colors,
                                   const std::vector<unsigned int>& elements);
         void create_render_object(const std::vector<vec3f>& vertices, vec3f color,
+                                  const std::vector<unsigned int>& elements);
+        void create_render_object(const std::vector<xyz_rgb_t>& vertices,
                                   const std::vector<unsigned int>& elements);
 
         std::string load_shader(std::string path);
