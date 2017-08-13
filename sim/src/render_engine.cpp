@@ -116,44 +116,29 @@ void copy_to_vbo(std::vector<vec3f> data, GLuint vbo, GLuint attribPointer)
     assert(glGetError() == GL_NO_ERROR);
 }
 
+void copy_xyz_rgb_to_vbo(const std::vector<xyz_rgb_t>& vertices, GLuint vbo, GLuint program)
+{
+    const unsigned int element_count = sizeof(xyz_rgb_t) / sizeof(float);
+    unsigned int count = vertices.size() * element_count;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, count*sizeof(GLfloat), (float*)&vertices[0], GL_STATIC_DRAW);
+
+    GLint posAttrib = glGetAttribLocation(program, "in_Position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, element_count*sizeof(float), 0);
+
+    GLint colAttrib = glGetAttribLocation(program, "in_Color");
+    glEnableVertexAttribArray(colAttrib);
+    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
+                           element_count*sizeof(float), (void*)(3*sizeof(float)));
+}
+
 void copy_elements_to_vbo(std::vector<unsigned int> elements, GLuint vbo)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  elements.size() * sizeof(unsigned int), (GLuint*)&elements[0], GL_STATIC_DRAW);
-}
-
-void RenderEngine::create_render_object(const std::vector<vec3f>& vertices,
-                                        const std::vector<vec3f>& colors,
-                                        const std::vector<unsigned int>& elements)
-{
-    assert(vertices.size() == colors.size());
-    assert(elements.size() >= vertices.size());
-    GLint posAttrib = glGetAttribLocation(program, "in_Position");
-    GLint colAttrib = glGetAttribLocation(program, "in_Color");
-
-    // Create VAO
-    RenderObject obj;
-
-    unsigned int count = vertices.size() * 3;
-
-    glGenVertexArrays(1, &obj.vao);
-    glBindVertexArray(obj.vao); //Make it the actual one
-
-    // Create 3 vbos : 1 for vertices, one for colors, one for elements
-    obj.vbos.resize(3, 0);
-    glGenBuffers(3, &(obj.vbos[0]));
-
-    // Copy position to first vbo
-    copy_to_vbo(vertices, obj.vbos[0], posAttrib);
-    copy_to_vbo(colors, obj.vbos[1], colAttrib);
-    copy_elements_to_vbo(elements, obj.vbos[2]);
-
-    // Release Vertex Array
-    glBindVertexArray(0);
-    assert(glGetError() == GL_NO_ERROR);
-
-    render_objects.push_back( obj );
 }
 
 
@@ -187,9 +172,11 @@ void RenderEngine::create_render_object(const std::vector<vec3f>& vertices, vec3
 void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
                                         const std::vector<unsigned int>& elements)
 {
+    assert(vertices.size() <= elements.size());
+
     // Create VAO
     RenderObject obj;
-    unsigned int count = vertices.size() * 3;
+    unsigned int count = vertices.size() * 6;
 
     glGenVertexArrays(1, &obj.vao);
     glBindVertexArray(obj.vao); //Make it the actual one
@@ -197,18 +184,7 @@ void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
     obj.vbos.resize(2, 0);
     glGenBuffers(2, &(obj.vbos[0]));
 
-    glBindBuffer(GL_ARRAY_BUFFER, obj.vbos[0]);
-    glBufferData(GL_ARRAY_BUFFER, count*sizeof(GLfloat), (float*)&vertices[0], GL_STATIC_DRAW);
-
-    GLint posAttrib = glGetAttribLocation(program, "in_Position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), 0);
-
-    GLint colAttrib = glGetAttribLocation(program, "in_Color");
-    glEnableVertexAttribArray(colAttrib);
-    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE,
-                           6*sizeof(float), (void*)(3*sizeof(float)));
-
+    copy_xyz_rgb_to_vbo(vertices, obj.vbos[0], program);
     copy_elements_to_vbo(elements, obj.vbos[1]);
 
     // Release Vertex Array
@@ -219,18 +195,8 @@ void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
 }
 void RenderEngine::create_vertex_buffer()
 {
-    // First simple object
-    //std::vector<vec3f> vertices;
-    //vertices.push_back({ 0.0,  0.6, -1.0});
-    //vertices.push_back({ 0.6, -0.4, -1.0});
-    //vertices.push_back({-0.6, -0.4, -1.0});
-
-    //std::vector<vec3f> colors;
-    //colors.push_back({ 1.0, 0.0, 0.0});
-    //colors.push_back({ 0.0, 1.0, 0.0});
-    //colors.push_back({ 0.0, 0.0, 1.0});
-
     std::vector<xyz_rgb_t> vertices;
+
     //                   R     G     B    X    Y    Z
     vertices.push_back({ 0.0,  0.6, -1.0, 1.0, 0.0, 0.0});
     vertices.push_back({ 0.6, -0.4, -1.0, 0.0, 1.0, 0.0});
@@ -238,17 +204,16 @@ void RenderEngine::create_vertex_buffer()
 
     std::vector<unsigned int> elements {0, 1, 2};
     create_render_object(vertices, elements);
-    //create_render_object(vertices, colors, elements);
 
     // Second simple object
-    vertices.clear();
-    vertices.push_back({-0.2,  0.5, -1.0});
-    vertices.push_back({ 0.3, -0.5, -1.0});
-    vertices.push_back({ 0.8,  0.5, -1.0});
+    std::vector<vec3f> vertices2;
+    vertices2.push_back({-0.2,  0.5, -1.0});
+    vertices2.push_back({ 0.3, -0.5, -1.0});
+    vertices2.push_back({ 0.8,  0.5, -1.0});
 
     vec3f col2 {1.0, 0.5, 0.0};
 
-    //create_render_object(vertices, col2, {0, 1, 2});
+    create_render_object(vertices2, col2, {0, 1, 2});
 }
 
 
