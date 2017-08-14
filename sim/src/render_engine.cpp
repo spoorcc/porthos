@@ -101,7 +101,13 @@ RenderEngine::operator std::string() const
 
 void RenderEngine::entity_added(shared_ptr<Entity> entity)
 {
+    PositionComponent* pos_ptr = entity->component<PositionComponent>();
+    RenderComponent* render_ptr = entity->component<RenderComponent>();
 
+    if (render_ptr != NULL)
+    {
+        create_render_object(render_ptr->vertices, render_ptr->elements);
+    }
 }
 
 void copy_to_vbo(std::vector<vec3f> data, GLuint vbo, GLuint attribPointer)
@@ -195,30 +201,6 @@ void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
 
     render_objects.push_back( obj );
 }
-void RenderEngine::create_vertex_buffer()
-{
-    std::vector<xyz_rgb_t> vertices;
-
-    //                   X     Y     Z    R    G    B
-    vertices.push_back({ 0.5,  0.5, -1.0, 1.0, 0.0, 0.0});
-    vertices.push_back({ 0.5, -0.5, -1.0, 0.0, 1.0, 0.0});
-    vertices.push_back({-0.5, -0.5, -1.0, 0.0, 0.0, 1.0});
-    vertices.push_back({-0.5,  0.5, -1.0, 0.0, 1.0, 1.0});
-
-    std::vector<unsigned int> elements {0, 2, 3, 0, 1, 2};
-    create_render_object(vertices, elements);
-
-    // Second simple object
-    std::vector<vec3f> vertices2;
-    vertices2.push_back({-0.2,  0.5, -1.0});
-    vertices2.push_back({ 0.3, -0.5, -1.0});
-    vertices2.push_back({ 0.8,  0.5, -1.0});
-
-    vec3f col2 {1.0, 0.5, 0.0};
-
-    create_render_object(vertices2, col2, {0, 1, 2});
-}
-
 
 void RenderEngine::setup()
 {
@@ -228,7 +210,6 @@ void RenderEngine::setup()
 
     setup_window();
     prepare_scene();
-    create_vertex_buffer();
 }
 
 void RenderEngine::setup_window()

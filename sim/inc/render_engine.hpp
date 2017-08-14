@@ -8,6 +8,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "position_component.hpp"
 #include "render_component.hpp"
 
 #define RENDER_ENGINE_WINDOW_WIDTH (640)
@@ -15,11 +16,6 @@
 #define RENDER_ENGINE_WINDOW_TITLE ("Porthos - Simulation")
 
 struct vec3f { float x,y,z; };
-
-struct xyz_rgb_t {
-    float x, y, z;
-    float r, g, b;
-};
 
 struct draw_array_t {
     GLenum mode = GL_TRIANGLES;
@@ -48,6 +44,9 @@ class RenderObject {
 
 class RenderEngine : public Engine {
 
+    typedef std::pair<PositionComponent*, RenderComponent*> pos_render_pair_t;
+    std::vector< pos_render_pair_t > pos_render_vect;
+
     std::vector< RenderComponent * > components;
     std::vector< RenderObject > render_objects;
     std::vector< GLuint > vbos;
@@ -73,7 +72,6 @@ class RenderEngine : public Engine {
         void setup_window();
         void prepare_scene();
 
-        void create_vertex_buffer();
         void create_render_object(const std::vector<vec3f>& vertices, vec3f color,
                                   const std::vector<unsigned int>& elements);
         void create_render_object(const std::vector<xyz_rgb_t>& vertices,

@@ -23,8 +23,9 @@ class Entity {
         unsigned long int ID;
 
         template <typename T>
-        void add_component() {
+        T* add_component() {
              components[typeid(T).name()] = new T;
+             return component<T>();
         }
 
         template <typename T>
