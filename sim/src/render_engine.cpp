@@ -187,6 +187,8 @@ void RenderEngine::create_render_object(const std::vector<xyz_rgb_t>& vertices,
     copy_xyz_rgb_to_vbo(vertices, obj.vbos[0], program);
     copy_elements_to_vbo(elements, obj.vbos[1]);
 
+    obj.draw_elements.count = elements.size();
+
     // Release Vertex Array
     glBindVertexArray(0);
     assert(glGetError() == GL_NO_ERROR);
@@ -197,12 +199,13 @@ void RenderEngine::create_vertex_buffer()
 {
     std::vector<xyz_rgb_t> vertices;
 
-    //                   R     G     B    X    Y    Z
-    vertices.push_back({ 0.0,  0.6, -1.0, 1.0, 0.0, 0.0});
-    vertices.push_back({ 0.6, -0.4, -1.0, 0.0, 1.0, 0.0});
-    vertices.push_back({-0.6, -0.4, -1.0, 0.0, 0.0, 1.0});
+    //                   X     Y     Z    R    G    B
+    vertices.push_back({ 0.5,  0.5, -1.0, 1.0, 0.0, 0.0});
+    vertices.push_back({ 0.5, -0.5, -1.0, 0.0, 1.0, 0.0});
+    vertices.push_back({-0.5, -0.5, -1.0, 0.0, 0.0, 1.0});
+    vertices.push_back({-0.5,  0.5, -1.0, 0.0, 1.0, 1.0});
 
-    std::vector<unsigned int> elements {0, 1, 2};
+    std::vector<unsigned int> elements {0, 2, 3, 0, 1, 2};
     create_render_object(vertices, elements);
 
     // Second simple object

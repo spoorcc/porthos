@@ -74,9 +74,6 @@ class RenderEngine : public Engine {
         void prepare_scene();
 
         void create_vertex_buffer();
-        void create_render_object(const std::vector<vec3f>& vertices,
-                                  const std::vector<vec3f>& colors,
-                                  const std::vector<unsigned int>& elements);
         void create_render_object(const std::vector<vec3f>& vertices, vec3f color,
                                   const std::vector<unsigned int>& elements);
         void create_render_object(const std::vector<xyz_rgb_t>& vertices,
