@@ -26,6 +26,7 @@ tags
 tmp
 # Generated targets
 bld
+cscope.*
 
 # Test outputs
 tst/output
