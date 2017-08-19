@@ -15,6 +15,7 @@
 #define RENDER_ENGINE_WINDOW_HEIGHT (480)
 #define RENDER_ENGINE_WINDOW_TITLE ("Porthos - Simulation")
 
+struct vec2f { float x,y; };
 struct vec3f { float x,y,z; };
 
 struct draw_array_t {
@@ -40,6 +41,10 @@ class RenderObject {
     std::vector<GLuint> vbos;
     draw_array_t draw_array;
     draw_elements_t draw_elements;
+
+    float rotation_degrees = 0.0f;
+    vec2f scale = {1.0f, 1.f};
+    vec3f translation = {0.0f, 0.0f, 0.0f};
 };
 
 class RenderEngine : public Engine {

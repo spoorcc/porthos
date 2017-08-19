@@ -83,9 +83,11 @@ void RenderEngine::update(void)
 
         for( auto obj : render_objects)
         {
-            model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-            model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-            model = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.0f));
+            glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(obj.scale.x, obj.scale.y, 1.0f));
+            glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), glm::radians(obj.rotation_degrees), glm::vec3(0.0f, 0.0f, 1.0f));
+            glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(obj.translation.x, obj.translation.y, obj.translation.z));
+
+            model = translate * rotate * scale;
             glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
             glBindVertexArray(obj.vao);
@@ -174,6 +176,14 @@ void RenderEngine::create_render_object(const std::vector<vec3f>& vertices, vec3
 
     copy_to_vbo(vertices, obj.vbos[0], posAttrib);
     copy_elements_to_vbo(elements, obj.vbos[1]);
+
+    // Set scale
+    obj.scale.x = 0.2f;
+
+    static_assert(std::is_same<decltype(obj.scale.x), float>::value, "X is not float");
+    std::cout << (float) obj.scale.x << std::endl;
+    //obj.translation = {0.5f, 0.5f, 0.0f};
+    //obj.rotation_degrees = 60.0f;
 
     // Set fixed color
     glVertexAttrib3f((GLuint)1, color.x, color.y, color.z); // set constant color attribute
