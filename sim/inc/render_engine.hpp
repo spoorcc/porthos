@@ -52,6 +52,7 @@ class RenderEngine : public Engine {
     std::vector< GLuint > vbos;
     std::vector< GLuint > shaders;
     GLuint program;
+    GLint uniModel;
     GLint mvp_location;
     GLFWwindow* window;
 

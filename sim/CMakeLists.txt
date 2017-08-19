@@ -17,7 +17,8 @@ target_link_libraries(simulator move_engine collision_engine factory ray_trace_e
 
 IF( BUILD_PORTHOS_SIM_GUI)
     add_library(render_engine SHARED src/render_engine.cpp)
-    target_include_directories(render_engine PRIVATE ${glfw_INCLUDE_DIRS} ${GLAD_INCLUDE_DIRS})
+    message(${GLM_INCLUDE_DIR})
+    target_include_directories(render_engine PRIVATE ${glfw_INCLUDE_DIRS} ${GLAD_INCLUDE_DIRS} ${GLM_INCLUDE_DIR})
     target_link_libraries(render_engine glfw glad  ${OPENGL_gl_LIBRARY})
     target_link_libraries(simulator render_engine)
 

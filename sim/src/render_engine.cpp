@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <cassert>
 #include <string>
 #include <vector>
@@ -76,8 +79,15 @@ void RenderEngine::update(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(program);
 
+        glm::mat4 model(1.0);
+
         for( auto obj : render_objects)
         {
+            model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+            model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+            model = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.0f));
+            glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
+
             glBindVertexArray(obj.vao);
             //glDrawArrays(obj.draw_array.mode, obj.draw_array.first, obj.draw_array.count);
             glDrawElements(obj.draw_elements.mode, obj.draw_elements.count,
@@ -251,6 +261,7 @@ void RenderEngine::prepare_scene()
     glBindAttribLocation(program, 1, "in_Color");
 
     glLinkProgram(program);
+    uniModel = glGetUniformLocation(program, "model");
 
     glGetProgramiv(program, GL_LINK_STATUS, &program_ok);
 
@@ -261,11 +272,8 @@ void RenderEngine::prepare_scene()
         glDeleteProgram(program);
         throw std::runtime_error("Linking shader program failed");
     }
-    else
-    {
-        std::cout << "Shader program compiled" << std::endl;
-    }
     assert(glGetError() == GL_NO_ERROR);
+
 }
 
 std::string RenderEngine::load_shader(std::string path)
