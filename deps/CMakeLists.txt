@@ -1,0 +1,22 @@
+
+
+IF (BUILD_PORTHOS_SIM_GUI)
+# GLFW
+# Don't build any docs/tests/examples
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(glfw)
+
+# GLAD
+# Compile -fPIC to link the static GLAD lib to dynamic lib
+add_definitions(-fPIC)
+add_subdirectory(glad)
+set(GLAD_INCLUDE_DIRS ${GLAD_INCLUDE_DIRS} PARENT_SCOPE)
+set(GLAD_LIBRARIES ${GLAD_LIBRARIES} PARENT_SCOPE)
+
+# GLM
+set(GLM_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glm" PARENT_SCOPE)
+
+ENDIF (BUILD_PORTHOS_SIM_GUI)
